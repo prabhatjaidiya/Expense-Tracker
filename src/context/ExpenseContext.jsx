@@ -1,11 +1,5 @@
-import React from 'react'
+import { createContext } from "react";
 
-const ExpenseContext = () => {
-  return (
-    <div>
-      Expense Context
-    </div>
-  )
-}
+const ExpenseContext = createContext();
 
-export default ExpenseContext
+export default ExpenseContext;
