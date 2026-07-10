@@ -7,19 +7,24 @@ import ExpenseCategoryChart from '../components/ExpenseCategoryChart';
 import SavingsTrendChart from '../components/SavingsTrendChart';
 import RecentTransactions from '../components/RecentTransactions';
 import ExpenseContext from '../context/ExpenseContext';
+import { Link } from 'react-router-dom';
+import Hero from '../components/Hero';
+import EmptyState from '../components/EmptyState';
 
 const Dashboard = () => {
-  const { balance, totalIncome, totalExpense } = useContext(ExpenseContext);
-  return (
+  const { transactions } = useContext(ExpenseContext);
+  if (transactions.length === 0) {
+    return (
+    <>
+      <Hero />
+      <EmptyState />
+    </>
+    );
+  }
+
+  return(
     <div>
-      <h1 className='ml-6 text-3xl mb-4 font-semibold'>Welcome back, Prabhat! 👋</h1>
-      <span className='ml-10 font-md'>here's your financial overview</span>
-      <div className='flex justify-between px-10 mt-5'>
-        <Statcard heading="Total Balance" amount={balance} bg='#EEF4FF' icon={<img src='./src/assets/icons/wallet.png' className='w-14 h-14 rounded-3xl'/>} parcent="12.5"/>
-        <Statcard heading="Income" amount={totalIncome} bg="#ECFDF3" icon={<img src='./src/assets/icons/income.png' className='w-14 h-14 rounded-3xl'/>} parcent="8.3"/>
-        <Statcard heading="Expense" amount={totalExpense} bg="#FEF2F2" icon={<img src='./src/assets/icons/expense.png' className='w-14 h-14 rounded-3xl'/>} parcent="15.7"/>
-        <Statcard heading="Savings" amount={balance} bg='#F5F3FF' icon={<img src='./src/assets/icons/saving.png' className='w-14 h-14 rounded-3xl'/>} parcent="10.2"/>
-      </div>
+      <Hero />
       <div className='flex flex-wrap'>
         <div className='w-[50%] p-12'>
           <ExpenseChart />

@@ -1,31 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import ExpenseContext from "./ExpenseContext";
-import transactionsData from "../data/transactions";
+import transactionsData from "../data/transactionsData";
 
-const MONTHS = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-    ];
+const MONTHS = Array.from({ length: 6 }, (_, index) => {
+  const date = new Date();
+  date.setMonth(date.getMonth() - (5 - index));
+
+  return date.toLocaleString("en-US", {
+    month: "short",
+  });
+});
 
 const ExpenseProvider = ({ children }) => {
   
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(() => {
+  const storedTransactions = localStorage.getItem("transactions");
 
-  useEffect(() => {
-  const storedTransactions = JSON.parse(
-    localStorage.getItem("transactions")
-  );
+  return storedTransactions ? JSON.parse(storedTransactions) : [];
+});
 
-  setTransactions(
-    storedTransactions?.length
-      ? storedTransactions
-      : transactionsData
-  );
-}, []);
+
 
   useEffect(() => {
     localStorage.setItem(
@@ -44,11 +38,11 @@ const ExpenseProvider = ({ children }) => {
     );
   };
 
-  const updateTransaction = (updatedTransaction) => {
+  const updateTransaction = (id, updatedTransaction) => {
     setTransactions((prev) =>
       prev.map((item) =>
-        item.id === updatedTransaction.id
-          ? updatedTransaction
+        item.id === id
+          ? {...item, ...updatedTransaction}
           : item
       )
     );
@@ -173,13 +167,18 @@ const ExpenseProvider = ({ children }) => {
   }))
   },[transactions])
 
+  const loadDemoData = () => {
+    setTransactions(transactionsData);
+  };
+
+  const clearAllTransactions = () => {
+    setTransactions([]);
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
         transactions,
-        addTransaction,
-        deleteTransaction,
-        updateTransaction,
         totalIncome,
         totalExpense,
         balance,
@@ -187,6 +186,11 @@ const ExpenseProvider = ({ children }) => {
         pieData,
         monthlyIncomeExpenseData,
         monthlyExpenseData,
+        addTransaction,
+        deleteTransaction,
+        updateTransaction,
+        loadDemoData,
+        clearAllTransactions,
       }}
     >
       {children}

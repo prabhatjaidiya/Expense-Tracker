@@ -2,6 +2,7 @@ import { useContext } from "react";
 import ExpenseContext from "../context/ExpenseContext";
 import { Car, Landmark, ShoppingBag, Utensils, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
+import TransactionTable from "./TransactionTable";
 
 const getCategoryIcon = (category) => {
   switch (category) {
@@ -24,7 +25,7 @@ const getCategoryIcon = (category) => {
 
 const RecentTransactions = () => {
   const { transactions } = useContext(ExpenseContext);
-  
+
 
   const latestTransactions = [...transactions].slice(0, 10);
 
@@ -37,7 +38,6 @@ const RecentTransactions = () => {
           View All
         </Link>
       </div>
-
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -48,6 +48,7 @@ const RecentTransactions = () => {
               <th className="pb-4 font-medium">Amount</th>
               <th className="pb-4 font-medium">Date</th>
               <th className="pb-4 font-medium">Method</th>
+              <th className="pb-4 font-medium">Type</th>
 
             </tr>
           </thead>
@@ -105,15 +106,13 @@ const RecentTransactions = () => {
 
                 <td
 
-                  className={`font-bold ${
-
-                    item.type === "income"
+                  className={`font-bold ${item.type === "income"
 
                       ? "text-green-600"
 
                       : "text-red-500"
 
-                  }`}
+                    }`}
 
                 >
 
@@ -157,6 +156,19 @@ const RecentTransactions = () => {
 
 
 
+                </td>
+
+                {/* Type */}
+
+                <td>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${item.type === "income"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                      }`}
+                  >
+                    {item.type}
+                  </span>
                 </td>
 
               </tr>

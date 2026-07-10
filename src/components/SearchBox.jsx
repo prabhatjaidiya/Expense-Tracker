@@ -1,8 +1,8 @@
 import { Search } from "lucide-react";
 
-const SearchBox = () => {
+const SearchBox = ({ searchTerm, setSearchTerm }) => {
   return (
-    <div className="relative w-full max-w-sm mr-28">
+    <div className="relative w-full max-w-sm">
       <Search
         size={18}
         className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -11,6 +11,8 @@ const SearchBox = () => {
       <input
         type="text"
         placeholder="Search transactions..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className="
           w-full
           pl-11

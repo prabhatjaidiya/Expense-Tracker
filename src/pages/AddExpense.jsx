@@ -1,11 +1,16 @@
-import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import ExpenseContext from "../context/ExpenseContext";
 
 const AddExpense = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { addTransaction } = useContext(ExpenseContext);
+  const { transactions, addTransaction, updateTransaction } = useContext(ExpenseContext);
+  const transaction = transactions.find((item) => String(item.id) === String(id));
+
+  console.log("ID:", id);
+  console.log("Transaction:", transaction);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -16,6 +21,22 @@ const AddExpense = () => {
     date: "",
     notes: "",
   });
+
+  useEffect(() => {
+    if (transaction) {
+      setFormData({
+        title: transaction.title,
+        amount: transaction.amount,
+        category: transaction.category,
+        type: transaction.type === "income"
+          ? "Income"
+          : "Expense",
+        paymentMethod: transaction.paymentMethod,
+        date: transaction.date,
+        notes: transaction.notes || "",
+      });
+    }
+  }, [transaction]);
 
   const [errors, setErrors] = useState({});
 
@@ -67,8 +88,7 @@ const AddExpense = () => {
 
     if (!validateForm()) return;
 
-    const newTransaction = {
-      id: uuid(),
+    const transactionData = {
       title: formData.title,
       amount: Number(formData.amount),
       category: formData.category,
@@ -78,17 +98,14 @@ const AddExpense = () => {
       notes: formData.notes,
     };
 
-    addTransaction(newTransaction);
-
-    setFormData({
-      title: "",
-      amount: "",
-      category: "",
-      type: "Expense",
-      paymentMethod: "",
-      date: "",
-      notes: "",
-    });
+    if (id) {
+      updateTransaction(id, transactionData);
+    } else {
+      addTransaction({
+        id: uuid(),
+        ...transactionData,
+      });
+    }
 
     navigate("/");
   };
@@ -97,7 +114,7 @@ const AddExpense = () => {
     <div className="min-h-screen bg-white py-10 px-4">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl p-8">
         <h1 className="text-3xl font-bold mb-8 text-center">
-          Add Transaction
+          {id ? "Edit Transaction" : "Add Transaction"}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -251,7 +268,7 @@ const AddExpense = () => {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
           >
-            Add Transaction
+            {id ? "Update Transaction" : "Add Transaction"}
           </button>
         </form>
       </div>
