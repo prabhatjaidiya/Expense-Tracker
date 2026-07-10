@@ -31,6 +31,7 @@ const getCategoryIcon = (category) => {
 };
 
 const TransactionTable = ({ transactions }) => {
+    const navigate = useNavigate();
     const { deleteTransaction } = useContext(ExpenseContext)
 
     const handleDelete = (id) => {
