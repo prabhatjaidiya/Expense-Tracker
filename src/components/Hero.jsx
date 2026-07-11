@@ -1,25 +1,82 @@
-import React, { useContext } from 'react'
-import Statcard from './Statcard'
-import ExpenseContext from '../context/ExpenseContext'
-import walletIcon from "../assets/icons/wallet.png";
-import incomeIcon from "../assets/icons/income.png";
-import expenseIcon from "../assets/icons/expense.png";
-import savingIcon from "../assets/icons/saving.png";
+import React, { useContext } from "react";
+import Statcard from "./Statcard";
+import ExpenseContext from "../context/ExpenseContext";
+import { FaWallet } from "react-icons/fa";
+import { MdOutlineAttachMoney } from "react-icons/md";
+import { IoTrendingDown } from "react-icons/io5";
+import { HiOutlineReceiptRefund } from "react-icons/hi2";
 
 const Hero = () => {
-    const { balance, totalIncome, totalExpense } = useContext(ExpenseContext)
-  return (
-    <>
-    <h1 className='ml-6 text-3xl mb-4 font-semibold'>Welcome back, Prabhat! 👋</h1>
-      <span className='ml-10 font-md'>here's your financial overview</span>
-      <div className='flex justify-between px-10 mt-5'>
-        <Statcard heading="Total Balance" amount={balance} bg='#EEF4FF' icon={<img src={walletIcon} alt="Wallet" className='w-14 h-14 rounded-3xl'/>} percent="12.5"/>
-        <Statcard heading="Income" amount={totalIncome} bg="#ECFDF3" icon={<img src={incomeIcon} alt="Income" className='w-14 h-14 rounded-3xl'/>} percent="8.3"/>
-        <Statcard heading="Expense" amount={totalExpense} bg="#FEF2F2" icon={<img src={expenseIcon} alt="Expense" className='w-14 h-14 rounded-3xl'/>} percent="15.7"/>
-        <Statcard heading="Savings" amount={balance} bg='#F5F3FF' icon={<img src={savingIcon} alt="Savings" className='w-14 h-14 rounded-3xl'/>} percent="10.2"/>
-      </div>
-    </>
-  )
-}
+  const {
+    totalBalance,
+    totalIncome,
+    totalExpense,
+    totalTransaction,
+  } = useContext(ExpenseContext);
 
-export default Hero
+  const balance = `₹ ${totalBalance.toLocaleString("en-IN")}`;
+  const income = `₹ ${totalIncome.toLocaleString("en-IN")}`;
+  const expense = `₹ ${totalExpense.toLocaleString("en-IN")}`;
+
+  return (
+    <div className="px-5 py-6">
+      {/* Heading */}
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+        Welcome back, Prabhat! 👋
+      </h1>
+
+      <p className="mt-2 text-gray-500">
+        Here's your financial overview.
+      </p>
+
+      {/* Cards */}
+      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <Statcard
+          heading="Balance"
+          amount={balance}
+          bg="#EEF4FF"
+          icon={
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+              <FaWallet className="text-2xl text-blue-600" />
+            </div>
+          }
+        />
+
+        <Statcard
+          heading="Income"
+          amount={income}
+          bg="#ECFDF3"
+          icon={
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
+              <MdOutlineAttachMoney className="text-2xl text-green-600" />
+            </div>
+          }
+        />
+
+        <Statcard
+          heading="Expense"
+          amount={expense}
+          bg="#FEF2F2"
+          icon={
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
+              <IoTrendingDown className="text-2xl text-red-600" />
+            </div>
+          }
+        />
+
+        <Statcard
+          heading="Transactions"
+          amount={totalTransaction}
+          bg="#F5F3FF"
+          icon={
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100">
+              <HiOutlineReceiptRefund className="text-2xl text-indigo-600" />
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Hero;

@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-3">
         <p className="text-gray-500 text-sm">{label}</p>
         <p className="text-blue-600 font-bold text-lg">
-          ₹ {payload[0].value.toLocaleString()}
+          ₹ {payload[0].value.toLocaleString("en-IN")}
         </p>
       </div>
     );
@@ -26,15 +26,25 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const ExpenseChart = () => {
-  
+
   const { monthlyExpenseData } = useContext(ExpenseContext);
+  const currentMonthExpense = monthlyExpenseData[monthlyExpenseData.length - 1]?.expense || 0;
+
+  const previousMonthExpense = monthlyExpenseData[monthlyExpenseData.length - 2]?.expense || 0;
+
+  const expenseChange =
+    previousMonthExpense === 0
+      ? 0
+      : ((currentMonthExpense - previousMonthExpense) /
+        previousMonthExpense) *
+      100;
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
 
       {/* Header */}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
 
         <div>
           <h2 className="text-xl font-bold text-gray-800">
@@ -46,35 +56,68 @@ const ExpenseChart = () => {
           </p>
         </div>
 
-        <div className="bg-red-100 text-red-600 px-4 py-2 rounded-full font-semibold">
-          +8.2%
+        <div
+          className={`px-4 py-2 rounded-full w-min font-semibold ${expenseChange >= 0
+            ? "bg-red-100 text-red-600"
+            : "bg-green-100 text-green-600"
+            }`}
+        >
+          {expenseChange >= 0 ? "+" : ""}
+          {expenseChange.toFixed(1)}%
         </div>
 
       </div>
 
       {/* Chart */}
+      <div className="w-full h-[280px] sm:h-[350px]">
+        <ResponsiveContainer width="100%" height="100%">
 
-      <ResponsiveContainer width="100%" height={350}>
+          <LineChart data={monthlyExpenseData}
+            margin={{
+              top: 10,
+              right: 20,
+              left: 10,
+              bottom: 0,
+            }}>
 
-        <LineChart data={monthlyExpenseData}>
+            <CartesianGrid
+              stroke="#E5E7EB"
+              strokeDasharray="3 3" />
 
-          <CartesianGrid strokeDasharray="4 4" />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false} />
 
-          <XAxis dataKey="month" />
+            <YAxis
+              tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}K`}
+              tickLine={false}
+              axisLine={false} />
 
-          <YAxis  />
+            <Tooltip content={<CustomTooltip />} />
 
-          <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="expense"
+              stroke="#2563EB"
+              strokeWidth={3}
+              dot={{
+                r: 4,
+                fill: "#2563EB",
+                strokeWidth: 2,
+                stroke: "#fff",
+              }}
+              activeDot={{
+                r: 7,
+                fill: "#2563EB",
+              }}
+              isAnimationActive
+              animationDuration={1000} />
 
-          <Line
-            type="monotone"
-            dataKey="expense"
-            stroke="#2563EB"
-            strokeWidth={4} />
+          </LineChart>
 
-        </LineChart>
-
-      </ResponsiveContainer>
+        </ResponsiveContainer>
+      </div>
 
     </div>
   );

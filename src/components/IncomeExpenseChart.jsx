@@ -4,26 +4,50 @@ import {
   BarChart,
   Bar,
   XAxis,
- YAxis,
+  YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
 
-
 const IncomeExpenseChart = () => {
-
   const { monthlyIncomeExpenseData } = useContext(ExpenseContext);
 
-    
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const income = payload.find((item) => item.dataKey === "Income")?.value || 0;
+      const expense = payload.find((item) => item.dataKey === "Expense")?.value || 0;
+
+      return (
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4">
+          <p className="text-gray-500 font-medium border-b pb-2 mb-2">
+            {label}
+          </p>
+
+          <div className="space-y-2">
+            <p className="text-green-600 font-semibold">
+              Income: ₹ {income.toLocaleString("en-IN")}
+            </p>
+
+            <p className="text-red-600 font-semibold">
+              Expense: ₹ {expense.toLocaleString("en-IN")}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
-
-      <div className="flex justify-between items-center mb-6">
-
+    <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
+      {/* Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">
             Income vs Expense
           </h2>
 
@@ -32,42 +56,62 @@ const IncomeExpenseChart = () => {
           </p>
         </div>
 
-        <div className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full font-semibold">
-          2026
+        <div className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full font-semibold w-fit">
+          {new Date().getFullYear()}
         </div>
-
       </div>
 
-      <ResponsiveContainer width="100%" height={350}>
+      {/* Chart */}
+      <div className="w-full h-[300px] sm:h-[350px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={monthlyIncomeExpenseData}
+            margin={{
+              top: 10,
+              right: 20,
+              left: 10,
+              bottom: 0,
+            }}
+            barGap={8}
+            barCategoryGap="25%">
+            <CartesianGrid
+              stroke="#E5E7EB"
+              strokeDasharray="4 4" />
 
-        <BarChart data={monthlyIncomeExpenseData}>
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false} />
 
-          <CartesianGrid strokeDasharray="4 4" />
+            <YAxis tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}K`}
+              tickLine={false}
+              axisLine={false} />
 
-          <XAxis dataKey="month" />
+            <Tooltip content={<CustomTooltip />} />
 
-          <YAxis />
+            <Legend iconType="circle" />
 
-          <Tooltip />
+            <Bar
+              dataKey="Income"
+              barSize={24}
+              name="Income"
+              fill="#22C55E"
+              radius={[8, 8, 0, 0]}
+              animationBegin={200}
+              animationDuration={1000}
+            />
 
-          <Legend />
-
-          <Bar
-            dataKey="Income"
-            fill="#22C55E"
-            radius={[8, 8, 0, 0]}
-          />
-
-          <Bar
-            dataKey="Expense"
-            fill="#EF4444"
-            radius={[8, 8, 0, 0]}
-          />
-
-        </BarChart>
-
-      </ResponsiveContainer>
-
+            <Bar
+              dataKey="Expense"
+              barSize={24}
+              name="Expense"
+              fill="#EF4444"
+              radius={[8, 8, 0, 0]}
+              animationBegin={400}
+              animationDuration={1000}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

@@ -9,9 +9,6 @@ const AddExpense = () => {
   const { transactions, addTransaction, updateTransaction } = useContext(ExpenseContext);
   const transaction = transactions.find((item) => String(item.id) === String(id));
 
-  console.log("ID:", id);
-  console.log("Transaction:", transaction);
-
   const [formData, setFormData] = useState({
     title: "",
     amount: "",

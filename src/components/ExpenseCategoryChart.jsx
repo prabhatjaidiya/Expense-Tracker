@@ -8,6 +8,7 @@ import {
   Legend,
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
+import { useMediaQuery } from "react-responsive";
 
 const COLORS = [
   "#3B82F6",
@@ -21,14 +22,46 @@ const COLORS = [
   "#F97316",
 ];
 
+
+
 const ExpenseCategoryChart = () => {
 
   const { pieData } = useContext(ExpenseContext);
 
+  const isMobile = useMediaQuery({ maxWidth: 640 });
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const { name, value } = payload[0].payload;
+
+      return (
+        <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-4">
+          <p className="font-semibold text-gray-700 border-b pb-2 mb-2">
+            {name}
+          </p>
+
+          <p className="text-blue-600 font-bold">
+            ₹ {value.toLocaleString("en-IN")}
+          </p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  if (!pieData.length) {
+    return (
+      <div className="bg-white rounded-2xl shadow-md p-6 text-center text-gray-500">
+        No expense data available.
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
 
         <div>
           <h2 className="text-xl font-bold text-gray-800">
@@ -41,39 +74,52 @@ const ExpenseCategoryChart = () => {
         </div>
 
       </div>
+      <div className="w-full h-[300px] sm:h-[350px]">
+        <ResponsiveContainer width="100%" height="100%">
 
-      <ResponsiveContainer width="100%" height={350}>
+          <PieChart>
 
-        <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={isMobile ? 45 : 65}
+              outerRadius={isMobile ? 75 : 105}
+              paddingAngle={3}
+              cornerRadius={8}
+              label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+              labelLine={false}
+              activeOuterRadius={115}
+              animationDuration={1000}
+            >
+              {pieData.map((entry, index) => (
+                <Cell
+                  key={index}
+                  fill={COLORS[index % COLORS.length]}
+                  stroke="#fff"
+                  strokeWidth={2}
+                />
+              ))}
+            </Pie>
 
-          <Pie
-            data={pieData}
-            cx="50%"
-            cy="50%"
-            innerRadius={70}
-            outerRadius={110}
-            paddingAngle={4}
-            dataKey="value"
-            nameKey="name"
-            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
-          >
-            {pieData.map((entry, index) => (
-              <Cell
-                key={index}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
+            <Tooltip content={<CustomTooltip />} />
 
-          <Tooltip />
+            <Legend
+              verticalAlign="bottom"
+              iconType="circle"
+              wrapperStyle={{
+                paddingTop: 20,
+                fontSize: "14px",
+              }} />
 
-          <Legend />
+          </PieChart>
 
-        </PieChart>
+        </ResponsiveContainer>
+      </div>
 
-      </ResponsiveContainer>
-
-    </div>
+    </div >
   );
 };
 
