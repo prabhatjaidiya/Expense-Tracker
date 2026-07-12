@@ -40,7 +40,7 @@ const CategoryCard = () => {
           const percentage = (item.value / highestAmount) * 100;
 
           return (
-            <div key={item.name} className='flex justify-between items-center gap-4 py-2'>
+            <div key={item.name} className='flex justify-between items-center gap-4 py-[5px]'>
               <div className='flex-1'>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-semibold">

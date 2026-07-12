@@ -55,7 +55,7 @@ const RecentTransactions = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
+    <div className="bg-white rounded-2xl h-full pt-6 px-6">
 
       {/* Header */}
 

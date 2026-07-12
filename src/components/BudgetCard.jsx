@@ -1,9 +1,7 @@
 import React from 'react'
-import { GoArrowUpRight } from "react-icons/go";
 
-const Statcard = ({heading,amount,icon,bg}) => {
+const BudgetCard = ({ heading, amount, icon, bg }) => {
   return (
-    <>
     <div style={{backgroundColor:bg}} className='p-5 w-min rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'>
       <div className='flex gap-8 mb-4 items-center'>
         <div>
@@ -13,8 +11,7 @@ const Statcard = ({heading,amount,icon,bg}) => {
         {icon}
       </div>
     </div>
-    </>
   )
 }
 
-export default Statcard
+export default BudgetCard

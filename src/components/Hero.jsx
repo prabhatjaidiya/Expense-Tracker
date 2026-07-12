@@ -19,15 +19,7 @@ const Hero = () => {
   const expense = `₹ ${totalExpense.toLocaleString("en-IN")}`;
 
   return (
-    <div className="px-5 py-6">
-      {/* Heading */}
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-        Welcome back, Prabhat! 👋
-      </h1>
-
-      <p className="mt-2 text-gray-500">
-        Here's your financial overview.
-      </p>
+    <div className="px-5 pb-6">
 
       {/* Cards */}
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">

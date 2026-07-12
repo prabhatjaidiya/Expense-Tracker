@@ -1,47 +1,89 @@
 import { GrAdd } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
-import { Link } from 'react-router-dom';
-import { CiDark } from 'react-icons/ci';
+import { CiDark } from "react-icons/ci";
 import { useContext } from "react";
 import ExpenseContext from "../context/ExpenseContext";
 import logo from "../assets/icons/icon.jpeg";
-
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
-  const {
-    loadDemoData,
-    clearAllTransactions,
-  } = useContext(ExpenseContext);
+  const { loadDemoData, clearAllTransactions, transactions } =
+    useContext(ExpenseContext);
+
+  const location = useLocation();
+
+  const pageTitles = {
+    "/": "Dashboard",
+    "/transactions": "Transactions",
+    "/add-expense": "Add Transaction",
+    "/analytics": "Analytics",
+    "/settings": "Settings",
+  };
+
+  const pageTitle =
+    location.pathname.startsWith("/add-expense")
+      ? "Add Transaction"
+      : pageTitles[location.pathname] || "Expense Tracker";
 
   return (
-    <div className='flex justify-between items-center m-7'>
-      <div className='flex items-center gap-4'>
-        <img className='h-10 w-10 rounded-lg' src={logo} alt="Logo" />
-        <h3 className='text-2xl font-semibold'>Expense Tracker</h3>
-      </div>
-      <div className='flex gap-10 items-center'>
-        <button
-          onClick={loadDemoData}
-          className='whitespace-nowrap bg-blue-700 flex items-center gap-2 text-sm text-white py-2 rounded-xl px-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'
-        >
-          Load Demo Data
-        </button>
-        <button
-          onClick={() => {
-            if (window.confirm("Are you sure you want to delete all transactions?")) {
-              clearAllTransactions();
-            }
-          }}
-          className='whitespace-nowrap bg-red-700 flex items-center gap-2 text-sm text-white py-2 rounded-xl px-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'
-        >
-          Clear All Data
-        </button>
-        <Link to='/add-expense'><button className='whitespace-nowrap bg-blue-700 flex items-center gap-2 text-sm text-white py-2 rounded-xl px-4 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'>{<GrAdd size={16} />}Add Transaction</button></Link>
-        <button className='border border-black rounded-xl p-2  hover:bg-gray-100 transition'>{<CiDark size={20} />}</button>
-        <Link><CgProfile size={28} className="cursor-pointer hover:text-blue-600 transition" /></Link>
-      </div>
-    </div>
-  )
-}
+    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b px-6 py-4">
+      <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
 
-export default Navbar
+        <div className="flex justify-between items-center w-full">
+
+          {/* Left */}
+          <div className="flex items-center gap-3">
+            {/* Logo */}
+            <img src={logo} className="h-8 w-8 rounded-xl" />
+
+            {/* Logo text (desktop only) */}
+            <h2 className="hidden lg:block font-semibold">
+              Expense Tracker
+            </h2>
+
+            {/* Welcome (desktop) / Page name (mobile) */}
+            <div className="lg:ml-12">
+              <h3 className="lg:hidden text-xl font-bold whitespace-nowrap overflow-hidden text-ellipsis">
+                {pageTitle}
+              </h3>
+
+              <div className="hidden lg:block">
+                <h3 className="text-2xl font-bold">
+                  Welcome back, Prabhat! 👋
+                </h3>
+                <p className="text-gray-500">
+                  Here's your financial overview.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right */}
+          <div className="flex items-center gap-3">
+            <Link to="/add-expense">
+              <button className="hidden lg:flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-300 shadow hover:shadow-lg">
+                <GrAdd />
+                Add Transaction
+              </button>
+            </Link>
+            {transactions.length > 0 && (
+                <button
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to delete all transactions?")) {
+                      clearAllTransactions();
+                    }
+                  }}
+                  className="lg:flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-lg transition duration-300 shadow hover:shadow-lg"
+                >
+                  Clear Data
+                </button>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

@@ -59,7 +59,7 @@ const ExpenseCategoryChart = () => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
+    <div className="bg-white rounded-2xl shadow-md px-2 py-6">
 
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
 

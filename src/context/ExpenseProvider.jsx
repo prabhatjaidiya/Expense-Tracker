@@ -223,6 +223,48 @@ const ExpenseProvider = ({ children }) => {
     setTransactions([]);
   };
 
+  const [monthlyBudget, setMonthlyBudget] = useState(
+    Number(localStorage.getItem("monthlyBudget")) || 0
+  );
+
+  const [categoryBudgets, setCategoryBudgets] = useState(
+    JSON.parse(localStorage.getItem("categoryBudgets")) || {
+      Food: 0,
+      Shopping: 0,
+      Transport: 0,
+      Bills: 0,
+      Entertainment: 0,
+      Health: 0,
+      Education: 0,
+    }
+  );
+
+  useEffect(() => {
+    localStorage.setItem("monthlyBudget", monthlyBudget);
+  }, [monthlyBudget]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "categoryBudgets",
+      JSON.stringify(categoryBudgets)
+    );
+  }, [categoryBudgets]);
+
+  const updateMonthlyBudget = (amount) => {
+    setMonthlyBudget(Number(amount));
+  };
+
+  const resetMonthlyBudget = () => {
+    setMonthlyBudget(0);
+  };
+
+  const updateCategoryBudget = (category, amount) => {
+    setCategoryBudgets((prev) => ({
+      ...prev,
+      [category]: Number(amount),
+    }));
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
@@ -231,6 +273,12 @@ const ExpenseProvider = ({ children }) => {
         totalExpense,
         totalBalance,
         totalTransaction,
+
+        monthlyBudget,
+        categoryBudgets,
+        updateMonthlyBudget,
+        resetMonthlyBudget,
+        updateCategoryBudget,
 
         highestExpense,
         highestIncome,

@@ -40,22 +40,22 @@ const Dashboard = () => {
     <div>
       <Hero />
       <div className='flex flex-wrap'>
-        <div className='w-full lg:w-1/2 p-6'>
+        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
           <ExpenseChart />
         </div>
-        <div className="w-full lg:w-1/2 p-6">
+        <div className="w-full lg:w-1/2 lg:px-6 p-0 pb-6">
           <IncomeExpenseChart />
         </div>
-        <div className='w-full lg:w-1/2 p-6'>
+        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
           <ExpenseCategoryChart />
         </div>
-        <div className='w-full lg:w-1/2 p-6'>
+        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
           <SavingsTrendChart />
         </div>
-        <div className='w-full lg:w-2/5 p-6'>
+        <div className='w-full lg:w-2/5 lg:px-6 p-0 pb-6'>
           <CategoryCard />
         </div>
-        <div className='w-full lg:w-3/5 p-6'>
+        <div className='w-full lg:w-3/5 lg:px-6 p-0 pb-6'>
           <RecentTransactions />
         </div>
         <div className="w-full p-12">

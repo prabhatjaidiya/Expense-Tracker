@@ -20,10 +20,10 @@ const EmptyState = () => {
                 transaction.
             </p>
 
-            <div className='flex gap-4 mt-6 justify-center'>
+            <div className='flex gap-2 mt-6 justify-center'>
                 <button
                     onClick={() => navigate("/add-expense")}
-                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg transition-colors duration-200"
+                    className="inline-flex items-center lg:gap-2 bg-blue-600 hover:bg-blue-700 text-white lg:px-5 lg:py-3 whitespace-nowrap px-3 py-2 gap-1 rounded-lg transition-colors duration-200"
                 >
                     <Plus size={18} />
                     Add Transaction
@@ -31,7 +31,7 @@ const EmptyState = () => {
 
                 <button
                     onClick={loadDemoData}
-                    className="inline-flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white px-5 py-3 rounded-lg transition-colors duration-200"
+                    className="inline-flex items-center lg:gap-2 bg-gray-700 hover:bg-gray-800 text-white lg:px-5 lg:py-3 whitespace-nowrap px-3 py-2 gap-1 rounded-lg transition-colors duration-200"
                 >
                     <Database size={18} />
                     Load Demo Data
