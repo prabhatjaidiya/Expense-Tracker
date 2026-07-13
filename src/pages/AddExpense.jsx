@@ -110,10 +110,6 @@ const AddExpense = () => {
   return (
     <div className="min-h-screen bg-white px-4">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl pb-8 pt-2 px-8">
-        <h1 className="text-3xl font-bold mb-8 text-center">
-          {id ? "Edit Transaction" : "Add Transaction"}
-        </h1>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>

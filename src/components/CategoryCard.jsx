@@ -40,7 +40,7 @@ const CategoryCard = () => {
           const percentage = (item.value / highestAmount) * 100;
 
           return (
-            <div key={item.name} className='flex justify-between items-center gap-4 py-[5px]'>
+            <div key={item.name} className='flex justify-between items-center gap-3 py-[3px]'>
               <div className='flex-1'>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-semibold">
@@ -65,7 +65,7 @@ const CategoryCard = () => {
               <div className="flex justify-between mt-1 text-xs text-gray-500">
                 <span className='pr-4'>{percentage.toFixed(0)}%</span>
 
-                <span className='font-bold lg:text-lg'>
+                <span className='font-bold lg:text-lg whitespace-nowrap'>
                   ₹ {item.value.toLocaleString("en-IN")}
                 </span>
               </div>

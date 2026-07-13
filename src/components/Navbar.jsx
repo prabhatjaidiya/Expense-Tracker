@@ -12,7 +12,49 @@ const Navbar = () => {
 
   const location = useLocation();
 
-  const pageTitles = {
+  const pageTitlesDesktop = {
+    "/": {
+      title: "Dashboard",
+      subtitle: "Welcome back! Here's your financial overview."
+    },
+    "/transactions": {
+      title: "Transactions",
+      subtitle: "Manage all your income and expenses."
+    },
+    "/add-expense": {
+      title: "Add Transaction",
+      subtitle: "Record a new income or expense."
+    },
+    "/analytics": {
+      title: "Analytics",
+      subtitle: "Track your spending with detailed insights."
+    },
+    "/budget": {
+      title: "Budget Planning",
+      subtitle: "Set budgets and monitor your spending."
+    },
+    "/reports": {
+      title: "Reports",
+      subtitle: "Export and review your financial reports."
+    },
+    "/settings": {
+      title: "Settings",
+      subtitle: "Customize your expense tracker."
+    },
+  };
+
+  const currentPage =
+    location.pathname.startsWith("/add-expense/")
+      ? {
+        title: "Edit Transaction",
+        subtitle: "Update your transaction details."
+      }
+      : pageTitlesDesktop[location.pathname] || {
+        title: "Expense Tracker",
+        subtitle: "Manage your finances."
+      };
+
+  const pageTitlesMobile = {
     "/": "Dashboard",
     "/transactions": "Transactions",
     "/add-expense": "Add Transaction",
@@ -21,9 +63,11 @@ const Navbar = () => {
   };
 
   const pageTitle =
-    location.pathname.startsWith("/add-expense")
+    location.pathname.startsWith("/add-expense/")
+    ? "Edit Transaction"
+    : location.pathname === "/add-expense"
       ? "Add Transaction"
-      : pageTitles[location.pathname] || "Expense Tracker";
+      : pageTitlesMobile[location.pathname] || "Expense Tracker";
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-sm border-b px-6 py-4">
@@ -49,10 +93,10 @@ const Navbar = () => {
 
               <div className="hidden lg:block">
                 <h3 className="text-2xl font-bold">
-                  Welcome back, Prabhat! 👋
+                  {currentPage.title}
                 </h3>
                 <p className="text-gray-500">
-                  Here's your financial overview.
+                  {currentPage.subtitle}
                 </p>
               </div>
             </div>
@@ -67,16 +111,16 @@ const Navbar = () => {
               </button>
             </Link>
             {transactions.length > 0 && (
-                <button
-                  onClick={() => {
-                    if (window.confirm("Are you sure you want to delete all transactions?")) {
-                      clearAllTransactions();
-                    }
-                  }}
-                  className="lg:flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-lg transition duration-300 shadow hover:shadow-lg"
-                >
-                  Clear Data
-                </button>
+              <button
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete all transactions?")) {
+                    clearAllTransactions();
+                  }
+                }}
+                className="lg:flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-lg transition duration-300 shadow hover:shadow-lg"
+              >
+                Clear Data
+              </button>
             )}
           </div>
 

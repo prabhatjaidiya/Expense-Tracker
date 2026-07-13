@@ -40,30 +40,30 @@ const Dashboard = () => {
     <div>
       <Hero />
       <div className='flex flex-wrap'>
-        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
+        <div className='w-full lg:px-4 p-0 pb-6'>
           <ExpenseChart />
         </div>
-        <div className="w-full lg:w-1/2 lg:px-6 p-0 pb-6">
+        <div className="w-full lg:w-1/2 lg:px-4 p-0 pb-6">
           <IncomeExpenseChart />
         </div>
-        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
+        <div className='w-full lg:w-1/2 lg:px-4 p-0 pb-6'>
           <ExpenseCategoryChart />
         </div>
-        <div className='w-full lg:w-1/2 lg:px-6 p-0 pb-6'>
+        <div className='w-full lg:w-1/2 lg:px-4 p-0 pb-6'>
           <SavingsTrendChart />
         </div>
-        <div className='w-full lg:w-2/5 lg:px-6 p-0 pb-6'>
+        <div className='w-full lg:w-1/2 lg:px-4 p-0 pb-6'>
           <CategoryCard />
         </div>
-        <div className='w-full lg:w-3/5 lg:px-6 p-0 pb-6'>
+        <div className='w-full lg:px-4 p-0 pb-6'>
           <RecentTransactions />
         </div>
-        <div className="w-full p-12">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="w-full lg:p-12">
+          <div className="grid grid-cols-2 gap-4 lg:gap-6 sm:grid-cols-2 xl:grid-cols-4">
             <AnalyticsCards
               icon={
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                  <FaArrowTrendUp className="text-2xl text-green-600" />
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                  <FaArrowTrendUp className="text-md lg:text-2xl text-green-600" />
                 </div>
               }
               title="Highest Income"
@@ -73,8 +73,8 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
-                  <FaArrowTrendDown className="text-2xl text-red-600" />
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                  <FaArrowTrendDown className="text-md lg:text-2xl text-red-600" />
                 </div>
               }
               title="Highest Expense"
@@ -84,8 +84,8 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                  <HiOutlineChartBar className="text-2xl text-orange-600" />
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                  <HiOutlineChartBar className="text-md lg:text-2xl text-orange-600" />
                 </div>
               }
               title="Average Monthly Expense"
@@ -95,8 +95,8 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                  <MdOutlineSavings className="text-2xl text-blue-600" />
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                  <MdOutlineSavings className="text-md lg:text-2xl text-blue-600" />
                 </div>
               }
               title="Average Monthly Income"

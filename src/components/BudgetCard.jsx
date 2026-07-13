@@ -1,15 +1,43 @@
 import React from 'react'
+import Budget from '../pages/Budget'
+import BudgetProgressCircle from './BudgetProgressCircle'
 
-const BudgetCard = ({ heading, amount, icon, bg }) => {
+const BudgetCard = () => {
+
   return (
-    <div style={{backgroundColor:bg}} className='p-5 w-min rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'>
-      <div className='flex gap-8 mb-4 items-center'>
-        <div>
-        <h3 className="text-base lg:text-lg font-semibold text-gray-800">{heading}</h3>
-        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 whitespace-nowrap">{amount}</h2>
+    <div className='flex shadow-xl rounded-xl px-8 pb-8'>
+      <div className='flex-1'>
+        <div className='flex flex-1 justify-between p-6 mr-20'>
+          <div>
+            <h2 className='text-3xl font-semibold mb-6'>Monthly Budget</h2>
+            <span className='text-5xl font-semibold'>50,000</span>
+          </div>
+          <div>
+            <h3 className='text-2xl font-semibold my-4 text-gray-600'>Total Spent</h3>
+            <span className='text-3xl font-semibold text-red-600'>31,500</span>
+          </div>
+          <div>
+            <h3 className='text-2xl font-semibold my-4 text-gray-600'>Remaining</h3>
+            <span className='text-3xl font-semibold text-green-600'>18,500</span>
+          </div>
         </div>
-        {icon}
+        <div className='px-8 flex'>
+          <button className='mt-2 py-2 px-5 h-min text-xl text-gray-600 hover:bg-gray-50 border border-gray-300 rounded-xl'>Edit Budget</button>
+          <div className='flex-1 mx-20'>
+            <div className="w-full bg-gray-100 rounded-full h-4 my-2 overflow-hidden">
+              <div
+                className="h-4 rounded-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-700"
+                style={{ width: `63%` }}
+              />
+            </div>
+            <div className='w-full flex justify-between px-2 pt-2'>
+              <span className='text-2xl'>0</span>
+              <span className='text-2xl'>50,000</span>
+            </div>
+          </div>
+        </div>
       </div>
+      <BudgetProgressCircle />
     </div>
   )
 }
