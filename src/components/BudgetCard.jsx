@@ -1,43 +1,108 @@
-import React from 'react'
-import Budget from '../pages/Budget'
+import { useContext } from "react";
 import BudgetProgressCircle from './BudgetProgressCircle'
+import ExpenseContext from '../context/ExpenseContext';
+import { Wallet } from "lucide-react";
 
 const BudgetCard = () => {
+  const { budgetSummary,monthlyBudget } = useContext(ExpenseContext);
+  const totalSpent = budgetSummary.spent;
+
+  const remaining = budgetSummary.remaining;
+
+  const percentage = budgetSummary.percentage;
+
+  const overBudget = budgetSummary.overBudget;
+  const exceededBy = budgetSummary.exceededBy;
+
+
+  let progressColor = "bg-green-500";
+  let Color = '#22C55E';
+
+  if (percentage >= 70) {
+    progressColor = "bg-yellow-500";
+    Color = "#EAB308"
+  }
+
+  if (percentage >= 90) {
+    progressColor = "bg-red-500";
+    Color = "#EF4444"
+  }
+
+  if (percentage > 100) {
+    progressColor = "bg-red-700";
+    Color = '#B91C1C';
+  }
 
   return (
-    <div className='flex shadow-xl rounded-xl px-8 pb-8'>
-      <div className='flex-1'>
-        <div className='flex flex-1 justify-between p-6 mr-20'>
+    <div className="flex flex-col items-center xl:flex-row gap-8 border shadow-sm rounded-2xl p-6 bg-white">
+      <div className='flex-1 w-full'>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h2 className='text-3xl font-semibold mb-6'>Monthly Budget</h2>
-            <span className='text-5xl font-semibold'>50,000</span>
+            <h2 className='flex items-center gap-2 text-3xl font-semibold mb-6'>
+              <Wallet className="text-blue-600" size={28} />
+              Monthly Budget</h2>
+            <span className='text-5xl font-semibold'>
+              ₹{monthlyBudget.toLocaleString("en-IN")}
+            </span>
           </div>
           <div>
             <h3 className='text-2xl font-semibold my-4 text-gray-600'>Total Spent</h3>
-            <span className='text-3xl font-semibold text-red-600'>31,500</span>
+            <span className='text-3xl font-semibold text-red-600'>
+              ₹{totalSpent.toLocaleString("en-IN")}
+            </span>
           </div>
           <div>
             <h3 className='text-2xl font-semibold my-4 text-gray-600'>Remaining</h3>
-            <span className='text-3xl font-semibold text-green-600'>18,500</span>
+            <span
+              className={`text-3xl font-semibold ${overBudget ? "text-red-600" : "text-green-600"
+                }`}
+            >
+              ₹{remaining.toLocaleString("en-IN")}
+            </span>
           </div>
         </div>
-        <div className='px-8 flex'>
-          <button className='mt-2 py-2 px-5 h-min text-xl text-gray-600 hover:bg-gray-50 border border-gray-300 rounded-xl'>Edit Budget</button>
-          <div className='flex-1 mx-20'>
-            <div className="w-full bg-gray-100 rounded-full h-4 my-2 overflow-hidden">
-              <div
-                className="h-4 rounded-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-700"
-                style={{ width: `63%` }}
-              />
-            </div>
-            <div className='w-full flex justify-between px-2 pt-2'>
-              <span className='text-2xl'>0</span>
-              <span className='text-2xl'>50,000</span>
-            </div>
-          </div>
+        <div className="mt-8 flex flex-col lg:flex-row items-start">
+          {
+            monthlyBudget === 0 ? (
+              <p className="text-gray-500 text-lg mt-4">
+                Set a monthly budget to start tracking your spending.
+              </p>
+            ) : (
+              <>
+                <div className='flex-1 w-full lg:mr-8'>
+                  <div className="w-full bg-gray-100 rounded-full h-4 my-2 overflow-hidden">
+                    <div
+                      className={`${progressColor} h-full transition-all duration-500`}
+                      style={{ width: `${Math.min(percentage, 100)}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-3">
+                    {overBudget ? (
+                      <p className="text-red-600 font-semibold">
+                        Over by ₹{exceededBy.toLocaleString("en-IN")}
+                      </p>
+                    ) : (
+                      <p className="text-green-600 font-semibold">
+                        Remaining ₹{remaining.toLocaleString("en-IN")}
+                      </p>
+                    )}
+
+                    <span className="font-semibold">
+                      {percentage.toFixed(0)}% Used
+                    </span>
+                  </div>
+                </div>
+              </>
+            )
+          }
         </div>
       </div>
-      <BudgetProgressCircle />
+      {monthlyBudget > 0 && (
+        <BudgetProgressCircle
+          percentage={percentage}
+          progressColor={Color}
+        />
+      )}
     </div>
   )
 }

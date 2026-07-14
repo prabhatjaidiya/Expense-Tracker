@@ -1,13 +1,15 @@
 import React, { useContext } from 'react'
-import ExpenseContext from '../context/ExpenseContext';
 import BudgetCard from '../components/BudgetCard';
+import BudgetMsgCard from '../components/BudgetMsgCard';
+import BudgetForm from '../components/BudgetForm';
 
 const Budget = () => {
-    const { monthlyBudget, categoryBudgets, updateMonthlyBudget, resetMonthlyBudget, updateCategoryBudget } = useContext(ExpenseContext)
 
   return (
     <div>
       <BudgetCard />
+      <BudgetMsgCard />
+      <BudgetForm />
     </div>
   )
 }

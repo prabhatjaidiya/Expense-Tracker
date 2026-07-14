@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ExpenseContext from "./ExpenseContext";
 import transactionsData from "../data/transactionsData";
 
@@ -28,17 +28,17 @@ const ExpenseProvider = ({ children }) => {
     );
   }, [transactions]);
 
-  const addTransaction = (transaction) => {
+  const addTransaction = useCallback((transaction) => {
     setTransactions((prev) => [transaction, ...prev]);
-  };
+  }, []);
 
-  const deleteTransaction = (id) => {
+  const deleteTransaction = useCallback((id) => {
     setTransactions((prev) =>
       prev.filter((item) => item.id !== id)
     );
-  };
+  }, []);
 
-  const updateTransaction = (id, updatedTransaction) => {
+  const updateTransaction = useCallback((id, updatedTransaction) => {
     setTransactions((prev) =>
       prev.map((item) =>
         item.id === id
@@ -46,7 +46,7 @@ const ExpenseProvider = ({ children }) => {
           : item
       )
     );
-  };
+  }, []);
 
   const totalIncome = useMemo(() => {
     return transactions
@@ -221,6 +221,16 @@ const ExpenseProvider = ({ children }) => {
 
   const clearAllTransactions = () => {
     setTransactions([]);
+    setMonthlyBudget(0);
+    setCategoryBudgets({
+      Food: 0,
+      Shopping: 0,
+      Transport: 0,
+      Bills: 0,
+      Entertainment: 0,
+      Health: 0,
+      Education: 0,
+    });
   };
 
   const [monthlyBudget, setMonthlyBudget] = useState(
@@ -250,19 +260,150 @@ const ExpenseProvider = ({ children }) => {
     );
   }, [categoryBudgets]);
 
-  const updateMonthlyBudget = (amount) => {
+  const updateMonthlyBudget = useCallback((amount) => {
     setMonthlyBudget(Number(amount));
-  };
+  }, []);
 
-  const resetMonthlyBudget = () => {
+  const resetMonthlyBudget = useCallback(() => {
     setMonthlyBudget(0);
-  };
+  }, []);
 
-  const updateCategoryBudget = (category, amount) => {
+  const updateCategoryBudget = useCallback((category, amount) => {
     setCategoryBudgets((prev) => ({
       ...prev,
       [category]: Number(amount),
-    }));
+    })), []
+  });
+
+  const currentMonthSpent = transactions.filter((transaction) => {
+      const date = new Date(transaction.date);
+
+      return (
+        transaction.type === "expense" &&
+        date.getMonth() === new Date().getMonth() &&
+        date.getFullYear() === new Date().getFullYear()
+      );
+    }).reduce((sum, transaction) => sum + Number(transaction.amount), 0);
+
+  const budgetSummary = useMemo(() => {
+    const spent = currentMonthSpent;
+
+    const remaining = Math.max(monthlyBudget - spent, 0);
+
+    const percentage =
+      monthlyBudget > 0
+        ? (spent / monthlyBudget) * 100
+        : 0;
+
+    const overBudget = spent > monthlyBudget;
+
+    const exceededBy = overBudget
+      ? spent - monthlyBudget
+      : 0;
+
+    return {
+      spent,
+      remaining,
+      percentage,
+      overBudget,
+      exceededBy,
+    };
+  }, [monthlyBudget, totalExpense]);
+
+  const categorySpending = useMemo(() => {
+    const spending = {};
+
+    transactions.forEach((transaction) => {
+      if (transaction.type === "expense") {
+        spending[transaction.category] =
+          (spending[transaction.category] || 0) +
+          transaction.amount;
+      }
+    });
+
+    return spending;
+  }, [transactions]);
+
+  const categoryBudgetSummary = useMemo(() => {
+    return Object.keys(categoryBudgets).map((category) => {
+      const budget = categoryBudgets[category] || 0;
+
+      const spent = categorySpending[category] || 0;
+
+      const remaining = Math.max(
+        budget - spent,
+        0
+      );
+
+      const percentage =
+        budget > 0
+          ? (spent / budget) * 100
+          : 0;
+
+      return {
+        category,
+        budget,
+        spent,
+        remaining,
+        percentage,
+        overBudget: spent > budget,
+      };
+    });
+  }, [categoryBudgets, categorySpending]);
+
+  const budgetStatus = useMemo(() => {
+    const percentage =
+      budgetSummary.percentage;
+
+    if (percentage > 100)
+      return {
+        color: "red",
+        message: "🚨 Budget exceeded",
+      };
+
+    if (percentage >= 90)
+      return {
+        color: "red",
+        message: "❌ Budget almost exhausted",
+      };
+
+    if (percentage >= 70)
+      return {
+        color: "yellow",
+        message: "⚠️ You've used over 70%",
+      };
+
+    return {
+      color: "green",
+      message: "✅ You're within budget",
+    };
+  }, [budgetSummary]);
+
+  const budgetUtilization = useMemo(() => {
+    return monthlyBudget > 0
+      ? (totalExpense / monthlyBudget) * 100
+      : 0;
+  }, [monthlyBudget, totalExpense]);
+
+  const highestSpendingCategory = useMemo(() => {
+    if (topSpendingCategories.length === 0)
+      return null;
+
+    return topSpendingCategories[0];
+  }, [topSpendingCategories]);
+
+  const [budget, setBudget] = useState(() => {
+    return Number(localStorage.getItem("budget")) || 0;
+  });
+
+  const saveBudget = (amount) => {
+    setBudget(Number(amount));
+    localStorage.setItem("budget", amount);
+  };
+
+  const resetBudget = () => {
+    setBudget(0);
+    localStorage.removeItem("budget");
   };
 
   return (
@@ -274,7 +415,18 @@ const ExpenseProvider = ({ children }) => {
         totalBalance,
         totalTransaction,
 
+        budget,
+        setBudget,
+        saveBudget,
+        resetBudget,
+        budgetUtilization,
+        highestSpendingCategory,
+        budgetStatus,
+        categoryBudgetSummary,
+        categorySpending,
+        budgetSummary,
         monthlyBudget,
+        setMonthlyBudget,
         categoryBudgets,
         updateMonthlyBudget,
         resetMonthlyBudget,

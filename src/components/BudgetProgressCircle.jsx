@@ -1,17 +1,21 @@
 const BudgetProgressCircle = ({
-  percentage = 63,
+  percentage = 0,
+  progressColor ,
   size = 160,
   strokeWidth = 14,
 }) => {
+  // Prevent values below 0 or above 100
+  const progress = Math.min(Math.max(percentage, 0), 100);
+
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
   const offset =
-    circumference - (percentage / 100) * circumference;
+    circumference - (progress / 100) * circumference;
 
   return (
     <div
-      className="relative flex items-center justify-center mt-12 mr-6"
+      className="relative flex items-center justify-center"
       style={{ width: size, height: size }}
     >
       <svg
@@ -25,7 +29,7 @@ const BudgetProgressCircle = ({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#E5E7EB"
+          stroke='#E5E7EB'
           strokeWidth={strokeWidth}
         />
 
@@ -35,23 +39,24 @@ const BudgetProgressCircle = ({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#22C55E"
+          stroke={progressColor}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           style={{
-            transition: "stroke-dashoffset 0.5s ease",
+            transition: "stroke-dashoffset .6s ease",
           }}
         />
       </svg>
 
-      {/* Center Text */}
-      <div className="absolute flex flex-col items-center">
-        <h2 className="text-4xl font-bold text-gray-900">
-          {percentage}%
+      <div className="absolute text-center">
+        <h2 className="text-4xl font-bold">
+          {progress.toFixed(0)}%
         </h2>
-        <p className="text-gray-500 text-lg font-semibold">Used</p>
+        <p className="text-gray-500 font-medium">
+          Used
+        </p>
       </div>
     </div>
   );
