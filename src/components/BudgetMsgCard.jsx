@@ -10,94 +10,91 @@ const BudgetMsgCard = () => {
     const percentage = budget > 0 ? (budgetSummary.spent / budget) * 100 : 0;
     const overBudget = Math.max(budgetSummary.spent - budget, 0);
 
-
-    let icon = <Wallet size={28} />;
-
-    if (!budget) {
-        icon = <Wallet size={52} />;
-    } else if (percentage < 60) {
-        icon = <CheckCircle size={52} />;
-    } else if (percentage < 100) {
-        icon = <AlertTriangle size={52} />;
-    } else {
-        icon = <XCircle size={52} />;
-    }
-
-    let iconColor = "text-blue-600";
+    let level = "none";
 
     if (!budget) {
-        iconColor = "text-blue-600";
+        level = "none";
+    } else if (budgetSummary.spent === 0) {
+        level = "start";
     } else if (percentage < 60) {
-        iconColor = "text-green-600";
+        level = "safe";
     } else if (percentage < 80) {
-        iconColor = "text-yellow-600";
+        level = "warning";
     } else if (percentage < 100) {
-        iconColor = "text-orange-600";
+        level = "danger";
     } else {
-        iconColor = "text-red-600";
+        level = "over";
     }
 
-    let status = {
-        title: "",
-        message: "",
-        bg: "",
-        border: "",
-    };
-
-    if (!budget) {
-        status = {
-            title: "💡 No Budget Set",
-            message: "Set your monthly budget to start tracking your spending.",
+    const STATUS = {
+        none: {
+            icon: <Wallet size={52} />,
+            iconColor: "text-blue-600",
             bg: "bg-blue-50",
             border: "border-blue-200",
-        };
-    } else if (budgetSummary.spent === 0) {
-        status = {
+            title: "💡 No Budget Set",
+            badge: "",
+        },
+
+        start: {
+            icon: <CheckCircle size={52} />,
+            iconColor: "text-green-600",
+            bg: "bg-green-50",
+            border: "border-green-200",
             title: "🎉 Great Start!",
-            message: "You haven't recorded any expenses yet.",
+            badge: "Ready",
+        },
+
+        safe: {
+            icon: <CheckCircle size={52} />,
+            iconColor: "text-green-600",
             bg: "bg-green-50",
             border: "border-green-200",
-        };
-    } else if (percentage < 60) {
-        status = {
             title: "✅ You're within your budget!",
-            message: `Great job! You still have ₹${remaining.toLocaleString()} remaining this month.`,
-            bg: "bg-green-50",
-            border: "border-green-200",
-        };
-    } else if (percentage < 80) {
-        status = {
-            title: "⚠️ You're approaching your budget.",
-            message: `You've used ${Math.round(percentage)}% of your monthly budget.`,
+            badge: "On Track",
+        },
+
+        warning: {
+            icon: <AlertTriangle size={52} />,
+            iconColor: "text-yellow-600",
             bg: "bg-yellow-50",
             border: "border-yellow-200",
-        };
-    } else if (percentage < 100) {
-        status = {
-            title: "🚨 Budget almost reached!",
-            message: `Only ₹${remaining.toLocaleString()} remains. Spend carefully.`,
+            title: "⚠️ You're approaching your budget.",
+            badge: "Watch Spending",
+        },
+
+        danger: {
+            icon: <AlertTriangle size={52} />,
+            iconColor: "text-orange-600",
             bg: "bg-orange-50",
             border: "border-orange-200",
-        };
-    } else {
-        status = {
-            title: "❌ Budget exceeded!",
-            message: `You've exceeded your budget by ₹${overBudget.toLocaleString("en-IN")}.`,
+            title: "🚨 Budget almost reached!",
+            badge: "Almost Full",
+        },
+
+        over: {
+            icon: <XCircle size={52} />,
+            iconColor: "text-red-600",
             bg: "bg-red-50",
             border: "border-red-200",
-        };
-    }
+            title: "❌ Budget exceeded!",
+            badge: "Over Budget",
+        },
+    };
+
+    const current = STATUS[level];
+
     return (
-        <div className={`rounded-2xl p-6 mt-2 flex items-start gap-8 shadow-sm border transition-all duration-300 ${status.bg} ${status.border}`}>
+        <div className={`rounded-2xl p-6 mt-2 flex items-start lg:gap-8 shadow-sm border transition-all duration-300 ${current.bg} ${current.border}`}>
             {/* Icon */}
-            <div className={`w-16 h-16 mx-4 rounded-full bg-white flex items-center justify-center shadow ${iconColor}`}>
-                {icon}
+            <div className={`w-16 h-16 mx-4 rounded-full bg-white flex items-center justify-center shadow ${current.iconColor}`}>
+                {current.icon}
             </div>
 
             {/* Content */}
             <div className="flex-1">
                 <h3 className="text-xl font-semibold text-gray-900">
-                    {status.title}
+                    {current.title}
                 </h3>
                 {!budget ? (
                     <>
@@ -105,10 +102,6 @@ const BudgetMsgCard = () => {
                             Set your monthly budget to start tracking your spending, receive
                             alerts, and manage your finances more effectively.
                         </p>
-
-                        <button className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
-                            Set Budget
-                        </button>
                     </>
                 ) : budgetSummary.spent === 0 ? (
                     <>
@@ -145,8 +138,15 @@ const BudgetMsgCard = () => {
                         </p>
 
                         <div className="mt-4 flex flex-wrap gap-3">
-                            <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
-                                {Math.round(percentage)}% Used
+                            <span className={`px-3 py-1 rounded-full ${percentage < 60
+                                    ? "bg-green-100 text-green-700"
+                                    : percentage < 80
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : percentage < 100
+                                            ? "bg-orange-100 text-orange-700"
+                                            : "bg-red-100 text-red-700"
+                                    } text-sm font-medium`}>
+                                {Math.min(percentage, 100).toFixed(0)}% Used
                             </span>
 
                             <span

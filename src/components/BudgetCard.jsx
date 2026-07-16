@@ -1,110 +1,171 @@
-import { useContext } from "react";
-import BudgetProgressCircle from './BudgetProgressCircle'
-import ExpenseContext from '../context/ExpenseContext';
-import { Wallet } from "lucide-react";
+import React, { useContext, useState } from "react";
+import { Pencil, Check, X } from "lucide-react";
+import ExpenseContext from "../context/ExpenseContext";
+import BudgetProgressCircle from "./BudgetProgressCircle";
 
-const BudgetCard = () => {
-  const { budgetSummary,monthlyBudget } = useContext(ExpenseContext);
-  const totalSpent = budgetSummary.spent;
+const BudgetSummaryCard = () => {
+    const {
+        monthlyBudget,
+        setMonthlyBudget,
+        budgetSummary,
+    } = useContext(ExpenseContext);
 
-  const remaining = budgetSummary.remaining;
+    const getProgressColor = (percentage) => {
+        if (percentage > 100) return "#B91C1C"; // red-700
+        if (percentage >= 90) return "#EF4444"; // red-500
+        if (percentage >= 70) return "#FACC15"; // yellow-400
+        return "#22C55E"; // green-500
+    };
 
-  const percentage = budgetSummary.percentage;
+    const [editing, setEditing] = useState(false);
+    const [budgetInput, setBudgetInput] = useState(monthlyBudget);
 
-  const overBudget = budgetSummary.overBudget;
-  const exceededBy = budgetSummary.exceededBy;
+    const handleSave = () => {
+        setMonthlyBudget(Math.max(0, Number(budgetInput) || 0));
+        setEditing(false);
+    };
 
+    const handleCancel = () => {
+        setBudgetInput(monthlyBudget);
+        setEditing(false);
+    };
 
-  let progressColor = "bg-green-500";
-  let Color = '#22C55E';
+    return (
+        <div className="bg-white rounded-3xl border shadow-sm p-4 sm:p-6">
 
-  if (percentage >= 70) {
-    progressColor = "bg-yellow-500";
-    Color = "#EAB308"
-  }
+            <div className="flex flex-col lg:flex-row justify-between gap-8">
 
-  if (percentage >= 90) {
-    progressColor = "bg-red-500";
-    Color = "#EF4444"
-  }
+                {/* Left */}
 
-  if (percentage > 100) {
-    progressColor = "bg-red-700";
-    Color = '#B91C1C';
-  }
+                <div className="flex-1">
 
-  return (
-    <div className="flex flex-col items-center xl:flex-row gap-8 border shadow-sm rounded-2xl p-6 bg-white">
-      <div className='flex-1 w-full'>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <h2 className='flex items-center gap-2 text-3xl font-semibold mb-6'>
-              <Wallet className="text-blue-600" size={28} />
-              Monthly Budget</h2>
-            <span className='text-5xl font-semibold'>
-              ₹{monthlyBudget.toLocaleString("en-IN")}
-            </span>
-          </div>
-          <div>
-            <h3 className='text-2xl font-semibold my-4 text-gray-600'>Total Spent</h3>
-            <span className='text-3xl font-semibold text-red-600'>
-              ₹{totalSpent.toLocaleString("en-IN")}
-            </span>
-          </div>
-          <div>
-            <h3 className='text-2xl font-semibold my-4 text-gray-600'>Remaining</h3>
-            <span
-              className={`text-3xl font-semibold ${overBudget ? "text-red-600" : "text-green-600"
-                }`}
-            >
-              ₹{remaining.toLocaleString("en-IN")}
-            </span>
-          </div>
-        </div>
-        <div className="mt-8 flex flex-col lg:flex-row items-start">
-          {
-            monthlyBudget === 0 ? (
-              <p className="text-gray-500 text-lg mt-4">
-                Set a monthly budget to start tracking your spending.
-              </p>
-            ) : (
-              <>
-                <div className='flex-1 w-full lg:mr-8'>
-                  <div className="w-full bg-gray-100 rounded-full h-4 my-2 overflow-hidden">
-                    <div
-                      className={`${progressColor} h-full transition-all duration-500`}
-                      style={{ width: `${Math.min(percentage, 100)}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-3">
-                    {overBudget ? (
-                      <p className="text-red-600 font-semibold">
-                        Over by ₹{exceededBy.toLocaleString("en-IN")}
-                      </p>
-                    ) : (
-                      <p className="text-green-600 font-semibold">
-                        Remaining ₹{remaining.toLocaleString("en-IN")}
-                      </p>
-                    )}
+                    <h2 className="text-xl font-semibold mb-6">
+                        Monthly Budget
+                    </h2>
 
-                    <span className="font-semibold">
-                      {percentage.toFixed(0)}% Used
-                    </span>
-                  </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x">
+
+                        <div className="pr-8">
+                            <p className="text-gray-500 mb-2">Budget</p>
+
+                            {editing ? (
+                                <input
+                                    type="number"
+                                    value={budgetInput}
+                                    onChange={(e) => setBudgetInput(e.target.value)}
+                                    className="border rounded-lg px-3 py-2 w-full max-w-[180px]"
+                                />
+                            ) : (
+                                <h2 className="text-3xl sm:text-4xl font-bold break-words">
+                                    ₹{monthlyBudget.toLocaleString()}
+                                </h2>
+                            )}
+                        </div>
+
+                        <div className="px-8">
+                            <p className="text-gray-500 mb-2">
+                                Total Spent
+                            </p>
+
+                            <h2 className="text-2xl sm:text-3xl font-bold text-red-500">
+                                {budgetSummary.spent.toLocaleString()}
+                            </h2>
+                        </div>
+
+                        <div className="px-8">
+                            <p className="text-gray-500 mb-2">
+                                Remaining
+                            </p>
+
+                            <h2 className={`text-2xl sm:text-3xl font-bold ${budgetSummary.remaining >= 0 ? "text-green-500" : "text-red-500"}`}>
+                                {budgetSummary.remaining.toLocaleString()}
+                            </h2>
+                        </div>
+
+                    </div>
+
+                    {/* Button */}
+
+                    <div className="mt-6 sm:mt-8">
+
+                        {editing ? (
+                            <div className="grid grid-cols-2 sm:flex gap-3">
+
+                                <button
+                                    onClick={handleSave}
+                                    className="w-full sm:w-auto px-5 py-2 rounded-xl bg-green-500 text-white flex items-center gap-2"
+                                >
+                                    <Check size={18} />
+                                    Save
+                                </button>
+
+                                <button
+                                    onClick={handleCancel}
+                                    className="w-full sm:w-auto px-5 py-2 rounded-xl border flex items-center gap-2"
+                                >
+                                    <X size={18} />
+                                    Cancel
+                                </button>
+
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => setEditing(true)}
+                                className="w-full sm:w-auto px-5 py-3 rounded-xl border flex justify-center items-center gap-2 hover:bg-gray-50"
+                            >
+                                <Pencil size={18} />
+                                Edit Budget
+                            </button>
+                        )}
+
+                    </div>
+
+                    {/* Progress */}
+
+                    <div className="mt-8">
+
+                        <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+
+                            <div
+                                style={{
+                                    width: `${Math.min(budgetSummary.percentage, 100)}%`,
+                                    backgroundColor: getProgressColor(budgetSummary.percentage),
+                                }}
+                                className="h-full rounded-full transition-all duration-500"
+                            />
+
+                        </div>
+
+                        <div className="flex justify-between mt-2 text-gray-500 font-medium">
+
+                            <span>₹0</span>
+
+                            <span>
+                                ₹{monthlyBudget.toLocaleString()}
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
-              </>
-            )
-          }
-        </div>
-      </div>
-      {monthlyBudget > 0 && (
-        <BudgetProgressCircle
-          percentage={percentage}
-          progressColor={Color}
-        />
-      )}
-    </div>
-  )
-}
 
-export default BudgetCard
+                {/* Right */}
+
+                <div className="flex justify-center lg:justify-end items-center">
+
+                    <BudgetProgressCircle
+                        percentage={budgetSummary.percentage}
+                        progressColor={getProgressColor(budgetSummary.percentage)}
+                        size={window.innerWidth < 640 ? 140 : 180}
+                    />
+
+                </div>
+
+            </div>
+
+        </div>
+    );
+};
+
+export default BudgetSummaryCard;

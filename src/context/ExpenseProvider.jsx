@@ -1,6 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ExpenseContext from "./ExpenseContext";
 import transactionsData from "../data/transactionsData";
+import {
+  UtensilsCrossed,
+  ShoppingBag,
+  Car,
+  FileText,
+  Gamepad2,
+  Heart,
+  GraduationCap,
+  HelpCircle,
+} from "lucide-react";
 
 const MONTHS = Array.from({ length: 6 }, (_, index) => {
   const date = new Date();
@@ -10,6 +20,16 @@ const MONTHS = Array.from({ length: 6 }, (_, index) => {
     month: "short",
   });
 });
+
+const categoryIcons = {
+  Food: UtensilsCrossed,
+  Shopping: ShoppingBag,
+  Transport: Car,
+  Bills: FileText,
+  Entertainment: Gamepad2,
+  Health: Heart,
+  Education: GraduationCap,
+};
 
 const ExpenseProvider = ({ children }) => {
 
@@ -276,19 +296,19 @@ const ExpenseProvider = ({ children }) => {
   });
 
   const currentMonthSpent = transactions.filter((transaction) => {
-      const date = new Date(transaction.date);
+    const date = new Date(transaction.date);
 
-      return (
-        transaction.type === "expense" &&
-        date.getMonth() === new Date().getMonth() &&
-        date.getFullYear() === new Date().getFullYear()
-      );
-    }).reduce((sum, transaction) => sum + Number(transaction.amount), 0);
+    return (
+      transaction.type === "expense" &&
+      date.getMonth() === new Date().getMonth() &&
+      date.getFullYear() === new Date().getFullYear()
+    );
+  }).reduce((sum, transaction) => sum + Number(transaction.amount), 0);
 
   const budgetSummary = useMemo(() => {
     const spent = currentMonthSpent;
 
-    const remaining = Math.max(monthlyBudget - spent, 0);
+    const remaining = monthlyBudget - spent;
 
     const percentage =
       monthlyBudget > 0
@@ -324,21 +344,42 @@ const ExpenseProvider = ({ children }) => {
     return spending;
   }, [transactions]);
 
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  const currentMonthCategorySpent = transactions.reduce(
+    (acc, transaction) => {
+      const date = new Date(transaction.date);
+
+      if (
+        transaction.type === "expense" &&
+        date.getMonth() === currentMonth &&
+        date.getFullYear() === currentYear
+      ) {
+        acc[transaction.category] += Number(transaction.amount);
+      }
+
+      return acc;
+    },
+    {
+      Food: 0,
+      Shopping: 0,
+      Transport: 0,
+      Bills: 0,
+      Entertainment: 0,
+      Health: 0,
+      Education: 0,
+    }
+  );
+
   const categoryBudgetSummary = useMemo(() => {
-    return Object.keys(categoryBudgets).map((category) => {
-      const budget = categoryBudgets[category] || 0;
+    return Object.entries(categoryBudgets).map(([category, budget]) => {
+      const spent = currentMonthCategorySpent[category] || 0;
 
-      const spent = categorySpending[category] || 0;
-
-      const remaining = Math.max(
-        budget - spent,
-        0
-      );
+      const remaining = Math.max(budget - spent, 0);
 
       const percentage =
-        budget > 0
-          ? (spent / budget) * 100
-          : 0;
+        budget > 0 ? Math.round((spent / budget) * 100) : 0;
 
       return {
         category,
@@ -347,9 +388,10 @@ const ExpenseProvider = ({ children }) => {
         remaining,
         percentage,
         overBudget: spent > budget,
+        icon: categoryIcons[category] || HelpCircle,
       };
     });
-  }, [categoryBudgets, categorySpending]);
+  }, [categoryBudgets, currentMonthCategorySpent]);
 
   const budgetStatus = useMemo(() => {
     const percentage =
@@ -406,6 +448,17 @@ const ExpenseProvider = ({ children }) => {
     localStorage.removeItem("budget");
   };
 
+  const budgetAlerts = useMemo(() => {
+    return categoryBudgetSummary
+      .filter(
+        (item) =>
+          item.budget > 0 &&
+          item.spent > 0 &&
+          item.percentage >= 70
+      )
+      .sort((a, b) => b.percentage - a.percentage);
+  }, [categoryBudgetSummary]);
+
   return (
     <ExpenseContext.Provider
       value={{
@@ -416,20 +469,19 @@ const ExpenseProvider = ({ children }) => {
         totalTransaction,
 
         budget,
-        setBudget,
-        saveBudget,
-        resetBudget,
-        budgetUtilization,
-        highestSpendingCategory,
-        budgetStatus,
-        categoryBudgetSummary,
-        categorySpending,
+        currentMonthSpent,
         budgetSummary,
         monthlyBudget,
         setMonthlyBudget,
-        categoryBudgets,
         updateMonthlyBudget,
         resetMonthlyBudget,
+
+        budgetUtilization,
+        highestSpendingCategory,
+        budgetAlerts,
+
+        categoryBudgetSummary,
+        setCategoryBudgets,
         updateCategoryBudget,
 
         highestExpense,

@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa6";
 import { MdOutlineSavings } from "react-icons/md";
 import { HiOutlineChartBar } from "react-icons/hi2";
+import BudgetWidget from '../components/BudgetWidget';
 
 const Dashboard = () => {
   const { transactions, highestExpense, highestIncome, averageMonthlyExpense, averageMonthlyIncome, } = useContext(ExpenseContext);
@@ -39,6 +40,7 @@ const Dashboard = () => {
   return (
     <div>
       <Hero />
+      <BudgetWidget />
       <div className='flex flex-wrap'>
         <div className='w-full lg:px-4 p-0 pb-6'>
           <ExpenseChart />
