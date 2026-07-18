@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,6 +13,12 @@ import ExpenseContext from "../context/ExpenseContext";
 
 const IncomeExpenseChart = () => {
   const { monthlyIncomeExpenseData } = useContext(ExpenseContext);
+
+  const [range, setRange] = useState(6);
+
+  const chartData = useMemo(() => {
+    return monthlyIncomeExpenseData.slice(-range);
+  }, [monthlyIncomeExpenseData, range]);
 
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -56,15 +62,22 @@ const IncomeExpenseChart = () => {
           </p>
         </div>
 
-        <div className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full font-semibold w-fit">
-          {new Date().getFullYear()}
-        </div>
+        <select
+          value={range}
+          onChange={(e) => setRange(Number(e.target.value))}
+          className="border rounded-lg w-min px-3 py-2 text-sm outline-none cursor-pointer"
+        >
+          <option value={1}>This Month</option>
+          <option value={3}>Last 3 Months</option>
+          <option value={6}>Last 6 Months</option>
+          <option value={12}>Last 12 Months</option>
+        </select>
       </div>
 
       {/* Chart */}
       <div className="w-full h-[300px] sm:h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={monthlyIncomeExpenseData}
+          <BarChart data={chartData}
             margin={{
               top: 10,
               right: 20,

@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import ExpenseProvider from './context/ExpenseProvider.jsx'
+import "react-datepicker/dist/react-datepicker.css";
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>

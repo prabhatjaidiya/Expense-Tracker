@@ -41,7 +41,7 @@ const MobileNavbar = () => {
         </NavLink>
 
         <NavLink
-          to="/budget"
+          to="/analytics"
           className={({ isActive }) =>
             `flex flex-col items-center text-xs ${
               isActive ? "text-blue-600" : "text-gray-500"
@@ -49,7 +49,7 @@ const MobileNavbar = () => {
           }
         >
           <MdOutlineAnalytics size={22} />
-          Budgets
+          Analytics
         </NavLink>
 
         <NavLink

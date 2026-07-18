@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   PieChart,
@@ -29,6 +29,13 @@ const ExpenseCategoryChart = () => {
   const { pieData } = useContext(ExpenseContext);
 
   const isMobile = useMediaQuery({ maxWidth: 640 });
+
+  const [range, setRange] = useState(6);
+
+  const chartData = useMemo(() => {
+    return pieData.slice(-range);
+  }, [pieData, range]);
+
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -72,7 +79,16 @@ const ExpenseCategoryChart = () => {
             Spending Breakdown
           </p>
         </div>
-
+        <select
+          value={range}
+          onChange={(e) => setRange(Number(e.target.value))}
+          className="border rounded-lg w-min px-3 py-2 text-sm outline-none cursor-pointer"
+        >
+          <option value={1}>This Month</option>
+          <option value={3}>Last 3 Months</option>
+          <option value={6}>Last 6 Months</option>
+          <option value={12}>Last 12 Months</option>
+        </select>
       </div>
       <div className="w-full h-[300px] sm:h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -80,7 +96,7 @@ const ExpenseCategoryChart = () => {
           <PieChart>
 
             <Pie
-              data={pieData}
+              data={chartData}
               dataKey="value"
               nameKey="name"
               cx="50%"

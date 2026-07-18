@@ -78,7 +78,7 @@ const BudgetInsights = () => {
   const hasData = chartData.some(item => item.value > 0);
 
   return (
-    <div className="flex flex-col flex-1 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+    <div className="flex flex-col md:flex-wrap flex-1 h-min mt-6 bg-white rounded-2xl border border-gray-200 p-6 shadow-md">
 
       <h2 className="text-xl font-semibold text-gray-800 mb-6">
         Budget Insights

@@ -25,6 +25,10 @@ const Sidebar = () => {
       name: "Add Transaction",
       icon: <GrAdd size={18} />,
       path: "/add-expense",
+    },{
+      name: "Analytics",
+      icon: <MdOutlineAnalytics size={20} />,
+      path: "/analytics",
     },
     {
       name: "Budget",

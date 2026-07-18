@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -39,6 +39,13 @@ const ExpenseChart = () => {
         previousMonthExpense) *
       100;
 
+  const [range, setRange] = useState(6);
+
+  const chartData = useMemo(() => {
+    return monthlyExpenseData.slice(-range);
+  }, [monthlyExpenseData, range]);
+
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
 
@@ -52,19 +59,20 @@ const ExpenseChart = () => {
           </h2>
 
           <p className="text-gray-500 text-sm">
-            Last 6 months
+            Recent months
           </p>
         </div>
 
-        <div
-          className={`px-4 py-2 rounded-full w-min font-semibold ${expenseChange >= 0
-            ? "bg-red-100 text-red-600"
-            : "bg-green-100 text-green-600"
-            }`}
+        <select
+          value={range}
+          onChange={(e) => setRange(Number(e.target.value))}
+          className="border rounded-lg w-min px-3 py-2 text-sm outline-none cursor-pointer"
         >
-          {expenseChange >= 0 ? "+" : ""}
-          {expenseChange.toFixed(1)}%
-        </div>
+          <option value={1}>This Month</option>
+          <option value={3}>Last 3 Months</option>
+          <option value={6}>Last 6 Months</option>
+          <option value={12}>Last 12 Months</option>
+        </select>
 
       </div>
 
@@ -72,7 +80,7 @@ const ExpenseChart = () => {
       <div className="w-full h-[280px] sm:h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
 
-          <LineChart data={monthlyExpenseData}
+          <LineChart data={chartData}
             margin={{
               top: 10,
               right: 20,

@@ -12,11 +12,40 @@ const Hero = () => {
     totalIncome,
     totalExpense,
     totalTransaction,
+    monthlySummary,
   } = useContext(ExpenseContext);
+
 
   const balance = `₹ ${totalBalance.toLocaleString("en-IN")}`;
   const income = `₹ ${totalIncome.toLocaleString("en-IN")}`;
   const expense = `₹ ${totalExpense.toLocaleString("en-IN")}`;
+
+  const calculatePercentage = (current, previous) => {
+    if (previous === 0) return 0;
+
+    return (((current - previous) / previous) * 100).toFixed(1);
+  };
+
+  const balancePercentage = calculatePercentage(
+    monthlySummary.currentBalance,
+    monthlySummary.previousBalance
+  );
+
+  const incomePercentage = calculatePercentage(
+    monthlySummary.currentIncome,
+    monthlySummary.previousIncome
+  );
+
+  const expensePercentage = calculatePercentage(
+    monthlySummary.currentExpense,
+    monthlySummary.previousExpense
+  );
+
+  const transectionPercentage = calculatePercentage(
+    monthlySummary.currentTransactions,
+    monthlySummary.previousTransactions
+
+  )
 
   return (
     <div className="lg:px-5 px-1 lg:pb-6 pb-3">
@@ -26,7 +55,8 @@ const Hero = () => {
         <Statcard
           heading="Balance"
           amount={balance}
-          bg="#EEF4FF"
+          percentage={balancePercentage}
+          isPositive={monthlySummary.currentBalance >= monthlySummary.previousBalance}
           icon={
             <div className="flex h-6 w-6 lg:h-12 lg:w-12 items-center justify-center rounded-lg bg-blue-100">
               <FaWallet className="text-md lg:text-2xl text-blue-600" />
@@ -37,7 +67,8 @@ const Hero = () => {
         <Statcard
           heading="Income"
           amount={income}
-          bg="#ECFDF3"
+          percentage={incomePercentage}
+          isPositive={monthlySummary.currentIncome >= monthlySummary.previousIncome}
           icon={
             <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-green-100">
               <MdOutlineAttachMoney className="text-md lg:text-2xl text-green-600" />
@@ -48,7 +79,8 @@ const Hero = () => {
         <Statcard
           heading="Expense"
           amount={expense}
-          bg="#FEF2F2"
+          percentage={expensePercentage}
+          isPositive={monthlySummary.currentExpense >= monthlySummary.previousExpense}
           icon={
             <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-red-100">
               <IoTrendingDown className="text-md lg:text-2xl text-red-600" />
@@ -59,7 +91,8 @@ const Hero = () => {
         <Statcard
           heading="Transactions"
           amount={totalTransaction}
-          bg="#F5F3FF"
+          percentage={transectionPercentage}
+          isPositive={monthlySummary.currentTransactions >= monthlySummary.previousTransactions}
           icon={
             <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-indigo-100">
               <HiOutlineReceiptRefund className="text-md lg:text-2xl text-indigo-600" />

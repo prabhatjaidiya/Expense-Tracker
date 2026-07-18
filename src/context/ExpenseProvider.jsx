@@ -12,9 +12,9 @@ import {
   HelpCircle,
 } from "lucide-react";
 
-const MONTHS = Array.from({ length: 6 }, (_, index) => {
+const MONTHS = Array.from({ length: 12 }, (_, index) => {
   const date = new Date();
-  date.setMonth(date.getMonth() - (5 - index));
+  date.setMonth(date.getMonth() - (11 - index));
 
   return date.toLocaleString("en-US", {
     month: "short",
@@ -39,7 +39,26 @@ const ExpenseProvider = ({ children }) => {
     return storedTransactions ? JSON.parse(storedTransactions) : [];
   });
 
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(new Date().getFullYear(), 0, 1),
+    endDate: new Date(),
+  });
 
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+
+      if (!dateRange.startDate || !dateRange.endDate) return true;
+
+      const start = new Date(dateRange.startDate);
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date(dateRange.endDate);
+      end.setHours(23, 59, 59, 999);
+
+      return transactionDate >= start && transactionDate <= end;
+    });
+  }, [transactions, dateRange]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -69,29 +88,29 @@ const ExpenseProvider = ({ children }) => {
   }, []);
 
   const totalIncome = useMemo(() => {
-    return transactions
+    return filteredTransactions
       .filter((item) => item.type === "income")
       .reduce((sum, item) => sum + item.amount, 0);
-  }, [transactions])
+  }, [filteredTransactions])
 
   const totalExpense = useMemo(() => {
-    return transactions
+    return filteredTransactions
       .filter((item) => item.type === "expense")
       .reduce((sum, item) => sum + item.amount, 0);
-  }, [transactions])
+  }, [filteredTransactions])
 
   const totalBalance = useMemo(() => {
     return totalIncome - totalExpense;
   }, [totalExpense, totalIncome])
 
-  const totalTransaction = transactions.length;
+  const totalTransaction = filteredTransactions.length;
 
 
   const monthlySavingsData = useMemo(() => {
 
     const monthlySaving = {};
 
-    transactions.forEach((transaction) => {
+    filteredTransactions.forEach((transaction) => {
       const month = new Date(transaction.date).toLocaleString("en-US", {
         month: "short",
       });
@@ -117,14 +136,14 @@ const ExpenseProvider = ({ children }) => {
         (monthlySaving[month]?.income || 0) -
         (monthlySaving[month]?.expense || 0),
     }));
-  }, [transactions])
+  }, [filteredTransactions])
 
 
   const pieData = useMemo(() => {
 
     const categoryMap = {};
 
-    transactions.forEach((transaction) => {
+    filteredTransactions.forEach((transaction) => {
       if (transaction.type === "expense") {
         categoryMap[transaction.category] = (categoryMap[transaction.category] || 0) + transaction.amount;
       }
@@ -134,14 +153,14 @@ const ExpenseProvider = ({ children }) => {
       name: key,
       value: categoryMap[key],
     }));
-  }, [transactions])
+  }, [filteredTransactions])
 
 
   const monthlyIncomeExpenseData = useMemo(() => {
 
     const monthMap = {};
 
-    transactions.forEach((transaction) => {
+    filteredTransactions.forEach((transaction) => {
       const month = new Date(transaction.date).toLocaleString("en-US", {
         month: "short",
       });
@@ -166,14 +185,14 @@ const ExpenseProvider = ({ children }) => {
       Income: monthMap[month]?.income || 0,
       Expense: monthMap[month]?.expense || 0,
     }));
-  }, [transactions]);
+  }, [filteredTransactions]);
 
 
   const monthlyExpenseData = useMemo(() => {
 
     const expenseByMonth = {};
 
-    transactions.forEach((transaction) => {
+    filteredTransactions.forEach((transaction) => {
       if (transaction.type === "expense") {
         const month = new Date(transaction.date).toLocaleString("en-US", {
           month: "short"
@@ -187,7 +206,7 @@ const ExpenseProvider = ({ children }) => {
       month,
       expense: expenseByMonth[month] || 0,
     }))
-  }, [transactions])
+  }, [filteredTransactions])
 
   const topSpendingCategories = useMemo(() => {
     return [...pieData]
@@ -196,20 +215,20 @@ const ExpenseProvider = ({ children }) => {
   }, [pieData]);
 
   const highestExpense = useMemo(() => {
-    return [...transactions]
+    return [...filteredTransactions]
       .filter((item) => item.type === "expense")
       .sort((a, b) => b.amount - a.amount)[0]
-  }, [transactions]);
+  }, [filteredTransactions]);
 
   const highestIncome = useMemo(() => {
-    return [...transactions]
+    return [...filteredTransactions]
       .filter((item) => item.type === "income")
       .sort((a, b) => b.amount - a.amount)[0]
-  }, [transactions]);
+  }, [filteredTransactions]);
 
   const averageMonthlyExpense = useMemo(() => {
     const expenseMonths = new Set(
-      transactions
+      filteredTransactions
         .filter((item) => item.type === "expense")
         .map((item) => {
           const date = new Date(item.date);
@@ -220,11 +239,11 @@ const ExpenseProvider = ({ children }) => {
     return expenseMonths.size > 0
       ? totalExpense / expenseMonths.size
       : 0;
-  }, [transactions, totalExpense]);
+  }, [filteredTransactions, totalExpense]);
 
   const averageMonthlyIncome = useMemo(() => {
     const incomeMonths = new Set(
-      transactions
+      filteredTransactions
         .filter((item) => item.type === "income")
         .map((item) => {
           const date = new Date(item.date);
@@ -233,7 +252,7 @@ const ExpenseProvider = ({ children }) => {
     );
 
     return incomeMonths.size > 0 ? totalIncome / incomeMonths.size : 0;
-  }, [transactions, totalIncome])
+  }, [filteredTransactions, totalIncome])
 
   const loadDemoData = () => {
     setTransactions(transactionsData);
@@ -295,7 +314,7 @@ const ExpenseProvider = ({ children }) => {
     })), []
   });
 
-  const currentMonthSpent = transactions.filter((transaction) => {
+  const currentMonthSpent = filteredTransactions.filter((transaction) => {
     const date = new Date(transaction.date);
 
     return (
@@ -333,7 +352,7 @@ const ExpenseProvider = ({ children }) => {
   const categorySpending = useMemo(() => {
     const spending = {};
 
-    transactions.forEach((transaction) => {
+    filteredTransactions.forEach((transaction) => {
       if (transaction.type === "expense") {
         spending[transaction.category] =
           (spending[transaction.category] || 0) +
@@ -342,12 +361,12 @@ const ExpenseProvider = ({ children }) => {
     });
 
     return spending;
-  }, [transactions]);
+  }, [filteredTransactions]);
 
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
-  const currentMonthCategorySpent = transactions.reduce(
+  const currentMonthCategorySpent = filteredTransactions.reduce(
     (acc, transaction) => {
       const date = new Date(transaction.date);
 
@@ -459,14 +478,187 @@ const ExpenseProvider = ({ children }) => {
       .sort((a, b) => b.percentage - a.percentage);
   }, [categoryBudgetSummary]);
 
+  const monthlySummary = useMemo(() => {
+    const summary = {
+      currentIncome: 0,
+      previousIncome: 0,
+      currentExpense: 0,
+      previousExpense: 0,
+      currentTransactions: 0,
+      previousTransactions: 0,
+    };
+
+    const now = new Date();
+
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const previousDate = new Date(currentYear, currentMonth - 1, 1);
+    const previousMonth = previousDate.getMonth();
+    const previousYear = previousDate.getFullYear();
+
+    filteredTransactions.forEach((transaction) => {
+      const date = new Date(transaction.date);
+
+      const isCurrent =
+        date.getMonth() === currentMonth &&
+        date.getFullYear() === currentYear;
+
+      const isPrevious =
+        date.getMonth() === previousMonth &&
+        date.getFullYear() === previousYear;
+
+      if (isCurrent) {
+        summary.currentTransactions++;
+
+        if (transaction.type === "income") {
+          summary.currentIncome += Number(transaction.amount);
+        } else {
+          summary.currentExpense += Number(transaction.amount);
+        }
+      }
+
+      if (isPrevious) {
+        summary.previousTransactions++;
+
+        if (transaction.type === "income") {
+          summary.previousIncome += Number(transaction.amount);
+        } else {
+          summary.previousExpense += Number(transaction.amount);
+        }
+      }
+    });
+
+    return {
+      ...summary,
+      currentBalance: summary.currentIncome - summary.currentExpense,
+      previousBalance: summary.previousIncome - summary.previousExpense,
+    };
+  }, [filteredTransactions]);
+
+  const spendingInsights = useMemo(() => {
+    const now = new Date();
+
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const previousDate = new Date(currentYear, currentMonth - 1, 1);
+    const previousMonth = previousDate.getMonth();
+    const previousYear = previousDate.getFullYear();
+
+    const currentTransactions = filteredTransactions.filter((t) => {
+      const d = new Date(t.date);
+      return (
+        d.getMonth() === currentMonth &&
+        d.getFullYear() === currentYear &&
+        t.type === "expense"
+      );
+    });
+
+    const previousTransactions = filteredTransactions.filter((t) => {
+      const d = new Date(t.date);
+      return (
+        d.getMonth() === previousMonth &&
+        d.getFullYear() === previousYear &&
+        t.type === "expense"
+      );
+    });
+
+    // Category totals
+    const currentCategory = {};
+    const previousCategory = {};
+
+    currentTransactions.forEach((t) => {
+      currentCategory[t.category] =
+        (currentCategory[t.category] || 0) + Number(t.amount);
+    });
+
+    previousTransactions.forEach((t) => {
+      previousCategory[t.category] =
+        (previousCategory[t.category] || 0) + Number(t.amount);
+    });
+
+    // Highest increase
+    let alert = null;
+    let maxIncrease = 0;
+
+    Object.keys(currentCategory).forEach((category) => {
+      const current = currentCategory[category] || 0;
+      const previous = previousCategory[category] || 0;
+
+      if (previous > 0) {
+        const increase = ((current - previous) / previous) * 100;
+
+        if (increase > maxIncrease) {
+          maxIncrease = increase;
+
+          alert = {
+            category,
+            percentage: Math.round(increase),
+          };
+        }
+      }
+    });
+
+    // Highest spending category
+    const highestCategory = Object.entries(currentCategory).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+
+    const savingOpportunity = highestCategory
+      ? {
+        category: highestCategory[0],
+        amount: Math.round(highestCategory[1] * 0.15), // Suggest saving 15%
+      }
+      : null;
+
+    // Savings comparison
+    const getSavings = (month, year) => {
+      let income = 0;
+      let expense = 0;
+
+      filteredTransactions.forEach((t) => {
+        const d = new Date(t.date);
+
+        if (d.getMonth() === month && d.getFullYear() === year) {
+          if (t.type === "income") income += Number(t.amount);
+          else expense += Number(t.amount);
+        }
+      });
+
+      return income - expense;
+    };
+
+    const currentSavings = getSavings(currentMonth, currentYear);
+    const previousSavings = getSavings(previousMonth, previousYear);
+
+    let savingsGrowth = 0;
+
+    if (previousSavings > 0) {
+      savingsGrowth =
+        ((currentSavings - previousSavings) / previousSavings) * 100;
+    }
+
+    return {
+      alert,
+      savingOpportunity,
+      savingsGrowth: Math.round(savingsGrowth),
+    };
+  }, [transactions]);
+
   return (
     <ExpenseContext.Provider
       value={{
         transactions,
+        filteredTransactions,
+        dateRange,
+        setDateRange,
         totalIncome,
         totalExpense,
         totalBalance,
         totalTransaction,
+
+        monthlySummary,
 
         budget,
         currentMonthSpent,
@@ -479,6 +671,7 @@ const ExpenseProvider = ({ children }) => {
         budgetUtilization,
         highestSpendingCategory,
         budgetAlerts,
+        spendingInsights,
 
         categoryBudgetSummary,
         setCategoryBudgets,

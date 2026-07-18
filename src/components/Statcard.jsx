@@ -1,20 +1,56 @@
-import React from 'react'
-import { GoArrowUpRight } from "react-icons/go";
+import React from "react";
+import { GoArrowUpRight, GoArrowDownRight } from "react-icons/go";
 
-const Statcard = ({heading,amount,icon,bg}) => {
+const StatCard = ({
+  heading,
+  amount,
+  icon,
+  bg,
+  percentage,
+  isPositive = true,
+  compareText = "vs last period",
+}) => {
   return (
-    <>
-    <div style={{backgroundColor:bg}} className='p-3 lg:p-5 w-min rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer'>
-      <div className='flex gap-3 lg:gap-6 mb-4 items-center'>
+    <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      <div className="flex items-center justify-between">
+        {/* Left Side */}
         <div>
-        <h3 className="text-sm lg:text-lg font-semibold text-gray-800">{heading}</h3>
-        <h2 className="text-sm lg:text-xl font-bold text-gray-900 whitespace-nowrap">{amount}</h2>
+          <h3 className="text-sm text-gray-500 font-medium">{heading}</h3>
+
+          <h2 className="text-2xl font-bold text-gray-900 mt-1">
+            {amount}
+          </h2>
+
+          {/* Percentage */}
+          <div className="flex items-center mt-2 text-sm">
+            <span
+              className={`flex items-center font-semibold ${
+                isPositive ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {isPositive ? (
+                <GoArrowUpRight className="mr-1" />
+              ) : (
+                <GoArrowDownRight className="mr-1" />
+              )}
+              {percentage}%
+            </span>
+
+            <span className="text-gray-500 ml-2">
+              {compareText}
+            </span>
+          </div>
         </div>
-        {icon}
+
+        {/* Right Side */}
+        <div
+          className="w-16 h-16 rounded-full flex items-center justify-center"
+        >
+          {icon}
+        </div>
       </div>
     </div>
-    </>
-  )
-}
+  );
+};
 
-export default Statcard
+export default StatCard;

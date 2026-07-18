@@ -38,9 +38,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
-      <Hero />
-      <BudgetWidget />
+    <div className="space-y-6">
+      <div>
+        <Hero />
+        <BudgetWidget />
+      </div>
       <div className='flex flex-wrap'>
         <div className='w-full lg:px-4 p-0 pb-6'>
           <ExpenseChart />

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -26,8 +26,13 @@ const SavingsTrendChart = () => {
       ? 0
       : ((currentSavings - previousSavings) / previousSavings) * 100;
 
-      
   const chartColor = currentSavings >= 0 ? "#22C55E" : "#EF4444";
+
+  const [range, setRange] = useState(6);
+
+  const chartData = useMemo(() => {
+    return monthlySavingsData.slice(-range);
+  }, [monthlySavingsData, range]);
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -44,7 +49,7 @@ const SavingsTrendChart = () => {
       );
     }
 
-    
+
 
     return null;
   };
@@ -70,26 +75,27 @@ const SavingsTrendChart = () => {
           </h2>
 
           <p className="text-gray-500 text-sm">
-            Last 6 Months
+            Recent Months
           </p>
         </div>
 
-        <div
-          className={`px-4 py-2 rounded-full w-min font-semibold ${savingsChange >= 0
-            ? "bg-green-100 text-green-600"
-            : "bg-red-100 text-red-600"
-            }`}
+        <select
+          value={range}
+          onChange={(e) => setRange(Number(e.target.value))}
+          className="border rounded-lg px-3 w-min py-2 text-sm outline-none cursor-pointer"
         >
-          {savingsChange >= 0 ? "+" : ""}
-          {savingsChange.toFixed(1)}%
-        </div>
+          <option value={1}>This Month</option>
+          <option value={3}>Last 3 Months</option>
+          <option value={6}>Last 6 Months</option>
+          <option value={12}>Last 12 Months</option>
+        </select>
 
       </div>
 
       <div className="w-full h-[300px] sm:h-[350px]">
         <ResponsiveContainer width="100%" height="100%">
 
-          <AreaChart data={monthlySavingsData}
+          <AreaChart data={chartData}
             margin={{
               top: 10,
               right: 20,
