@@ -9,6 +9,7 @@ import Sidebar from "./components/Sidebar";
 import { Link, useLocation } from "react-router-dom";
 import MobileNavbar from "./components/MobileNavbar";
 import Budget from "./pages/Budget";
+import Reports from "./pages/Reports";
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/add-expense/:id?" element={<AddExpense />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/report" element={<Reports />} />
               <Route path="/budget" element={<Budget />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>

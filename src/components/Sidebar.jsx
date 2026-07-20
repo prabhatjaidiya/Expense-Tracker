@@ -3,11 +3,13 @@ import {
   RiDashboardHorizontalLine,
 } from "react-icons/ri";
 import { GrTransaction, GrAdd } from "react-icons/gr";
-import { MdOutlineAnalytics } from "react-icons/md";
+import { HiOutlinePresentationChartLine } from "react-icons/hi2";
+import { PiWalletBold } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { CiDark } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/icons/icon.jpeg";
+import { FileBarChart } from "lucide-react";
 
 const Sidebar = () => {
   const menus = [
@@ -27,13 +29,17 @@ const Sidebar = () => {
       path: "/add-expense",
     },{
       name: "Analytics",
-      icon: <MdOutlineAnalytics size={20} />,
+      icon: <HiOutlinePresentationChartLine size={22} />,
       path: "/analytics",
     },
     {
       name: "Budget",
-      icon: <MdOutlineAnalytics size={20} />,
+      icon: <PiWalletBold size={20} />,
       path: "/budget",
+    },{
+      name: "Reports",
+      icon: <FileBarChart size={22} />,
+      path: "/report",
     },
     {
       name: "Settings",

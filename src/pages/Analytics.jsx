@@ -5,6 +5,7 @@ import ExpenseCategoryChartAnalytics from '../components/ExpenseCategoryChartAna
 import SavingsTrendCard from '../components/SavingsTrendCard'
 import TopSpendingCategories from '../components/TopSpendingCagory'
 import SpendingInsights from '../components/SpendingInsight'
+import BudgetOverview from '../components/BudgetOverview'
 
 const Analytics = () => {
   return (
@@ -15,10 +16,13 @@ const Analytics = () => {
         <ExpenseCategoryChartAnalytics />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <SavingsTrendCard />
           <TopSpendingCategories />
+        </div>
+        <div className="flex flex-wrap">
           <SpendingInsights />
+          <BudgetOverview />
         </div>
       </div>
     </div>

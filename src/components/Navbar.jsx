@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import exportCSV from "../utils/exportCSV";
 import exportPDF from "../utils/exportPDF";
+import ExportDropdown from "./ExportDropdown";
 
 
 const Navbar = () => {
@@ -54,8 +55,8 @@ const Navbar = () => {
       title: "Budget Planning",
       subtitle: "Set budgets and monitor your spending."
     },
-    "/reports": {
-      title: "Reports",
+    "/report": {
+      title: "Report",
       subtitle: "Export and review your financial reports."
     },
     "/settings": {
@@ -64,7 +65,7 @@ const Navbar = () => {
     },
   };
 
-  const isAnalyticsPage = location.pathname === "/analytics";
+  const isReportPage = location.pathname === "/report";
 
   const currentPage =
     location.pathname.startsWith("/add-expense/")
@@ -83,6 +84,7 @@ const Navbar = () => {
     "/add-expense": "Add Transaction",
     "/analytics": "Analytics",
     "/settings": "Settings",
+    "/report": "Report"
   };
 
   const pageTitle =
@@ -128,9 +130,8 @@ const Navbar = () => {
           {/* Right */}
           <div className="flex items-center gap-3">
 
-            {isAnalyticsPage ? (
+            {isReportPage ? (
               <>
-                {/* Date Range */}
                 <DatePicker
                   selectsRange
                   startDate={dateRange.startDate}
@@ -170,26 +171,8 @@ const Navbar = () => {
                     </button>
                   }
                 />
-
                 {/* Export */}
-                <button onClick={() => exportCSV(filteredTransactions)} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl shadow transition">
-                  <Download size={18} />
-                  <span className="hidden md:block">Export CSV</span>
-                  <ChevronDown size={16} />
-                </button>
-                <button
-                  onClick={() => exportPDF({
-                    transactions: filteredTransactions,
-                    totalIncome,
-                    totalExpense,
-                    totalBalance,
-                    dateRange,
-                  })
-                  } className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl shadow transition">
-                  <Download size={18} />
-                  <span className="hidden md:block">Export PDF</span>
-                  <ChevronDown size={16} />
-                </button>
+                <ExportDropdown />
               </>
             ) : (
               <>
@@ -248,15 +231,15 @@ const Navbar = () => {
                     >
                       Clear Data
                     </button>
-                    </>
-                )}
                   </>
                 )}
-
-              </div>
+              </>
+            )}
 
           </div>
+
         </div>
+      </div>
     </nav>
   );
 };

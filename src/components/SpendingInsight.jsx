@@ -56,7 +56,7 @@ const SpendingInsights = () => {
     }
 
     return (
-        <div className="bg-white rounded-xl h-min lg:mt-4 w-full shadow-md border border-gray-200 p-6">
+        <div className="bg-white lg:w-[35%] rounded-xl h-min lg:mt-4 shadow-md border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
                 Spending Insights
             </h2>

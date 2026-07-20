@@ -17,7 +17,7 @@ const StatCard = ({
         <div>
           <h3 className="text-sm text-gray-500 font-medium">{heading}</h3>
 
-          <h2 className="text-2xl font-bold text-gray-900 mt-1">
+          <h2 className="lg:text-2xl font-semibold lg:font-bold text-gray-900 mt-1">
             {amount}
           </h2>
 
@@ -31,12 +31,12 @@ const StatCard = ({
               {isPositive ? (
                 <GoArrowUpRight className="mr-1" />
               ) : (
-                <GoArrowDownRight className="mr-1" />
+                <GoArrowDownRight className="" />
               )}
               {percentage}%
             </span>
 
-            <span className="text-gray-500 ml-2">
+            <span className="text-gray-500 ml-2 text-xs">
               {compareText}
             </span>
           </div>
@@ -44,7 +44,7 @@ const StatCard = ({
 
         {/* Right Side */}
         <div
-          className="w-16 h-16 rounded-full flex items-center justify-center"
+          className="w-16 h-16 rounded-full flex items-start justify-center text-2xl"
         >
           {icon}
         </div>
