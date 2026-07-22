@@ -30,7 +30,7 @@ const BudgetWidget = () => {
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border p-6 m-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div className="bg-white rounded-2xl shadow-sm border p-6 lg:m-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer">
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">

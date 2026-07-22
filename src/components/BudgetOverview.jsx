@@ -23,7 +23,6 @@ const BudgetOverview = () => {
         if (percentage >= 70) return "#FACC15"; // yellow-400
         return "#22C55E"; // green-500
     };
-    console.log(budgetSummary, monthlyBudget);
 
     const formatCurrency = (value) =>
         `₹ ${Number(value).toLocaleString("en-IN")}`;
@@ -75,7 +74,7 @@ const BudgetOverview = () => {
     const status = getStatus();
 
     return (
-        <div className="bg-white lg:flex-1 rounded-xl border border-gray-200 p-4 shadow-md lg:m-4">
+        <div className="bg-white lg:flex-1 rounded-xl border mb-4 border-gray-200 p-4 shadow-md lg:m-4">
 
             {/* Header */}
             <div className="flex justify-between items-start">

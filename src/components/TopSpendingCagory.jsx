@@ -15,7 +15,6 @@ import ExpenseContext from "../context/ExpenseContext";
 const TopSpendingCategoriesAnalysis = () => {
 
     const { topSpendingCategories } = useContext(ExpenseContext);
-    console.log(topSpendingCategories);
 
     const categoryConfig = {
         Shopping: {

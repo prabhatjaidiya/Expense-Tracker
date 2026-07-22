@@ -10,8 +10,13 @@ import { CiDark } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
 import logo from "../assets/icons/icon.jpeg";
 import { FileBarChart } from "lucide-react";
+import { getCurrentUser } from "../utils/auth";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const Sidebar = () => {
+  const { currentUser } = useContext(AuthContext)
+
   const menus = [
     {
       name: "Dashboard",
@@ -27,7 +32,7 @@ const Sidebar = () => {
       name: "Add Transaction",
       icon: <GrAdd size={18} />,
       path: "/add-expense",
-    },{
+    }, {
       name: "Analytics",
       icon: <HiOutlinePresentationChartLine size={22} />,
       path: "/analytics",
@@ -36,17 +41,11 @@ const Sidebar = () => {
       name: "Budget",
       icon: <PiWalletBold size={20} />,
       path: "/budget",
-    },{
+    }, {
       name: "Reports",
       icon: <FileBarChart size={22} />,
-      path: "/report",
+      path: "/reports",
     },
-    {
-      name: "Settings",
-      icon: <IoSettingsOutline size={20} />,
-      path: "/settings",
-    },
-    
   ];
 
   return (
@@ -64,10 +63,9 @@ const Sidebar = () => {
               to={item.path}
               className={({ isActive }) =>
                 `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
-                ${
-                  isActive
-                    ? "bg-blue-600 text-white shadow-md"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                ${isActive
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
                 }`
               }
             >
@@ -93,23 +91,29 @@ const Sidebar = () => {
             className="accent-blue-600"
           />
         </button>
+        <NavLink to="/profile">
+          <div className="flex items-center gap-3 mt-5 p-3 rounded-xl hover:bg-gray-100 cursor-pointer transition">
+            <img
+              src={
+                currentUser?.avatar ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  currentUser?.fullName || "User"
+                )}`
+              }
+              alt={currentUser?.fullName || "User Avatar"}
+              className="w-12 h-12 rounded-2xl object-cover border border-white/20 shadow-lg"
+            />
+            <div>
+              <h3 className="font-semibold">
+                {currentUser?.fullName}
+              </h3>
 
-        <div className="flex items-center gap-3 mt-5 p-3 rounded-xl hover:bg-gray-100 cursor-pointer transition">
-          <CgProfile
-            size={42}
-            className="text-gray-500"
-          />
-
-          <div>
-            <h3 className="font-semibold">
-              Prabhat
-            </h3>
-
-            <p className="text-xs text-gray-500">
-              View Profile
-            </p>
+              <p className="text-xs text-gray-500">
+                View Profile
+              </p>
+            </div>
           </div>
-        </div>
+        </NavLink>
       </div>
     </aside>
   );

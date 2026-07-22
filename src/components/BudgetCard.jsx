@@ -8,6 +8,7 @@ const BudgetSummaryCard = () => {
         monthlyBudget,
         setMonthlyBudget,
         budgetSummary,
+        updateMonthlyBudget
     } = useContext(ExpenseContext);
 
     const getProgressColor = (percentage) => {
@@ -21,7 +22,7 @@ const BudgetSummaryCard = () => {
     const [budgetInput, setBudgetInput] = useState(monthlyBudget);
 
     const handleSave = () => {
-        setMonthlyBudget(Math.max(0, Number(budgetInput) || 0));
+        updateMonthlyBudget(Math.max(0, Number(budgetInput) || 0));
         setEditing(false);
     };
 

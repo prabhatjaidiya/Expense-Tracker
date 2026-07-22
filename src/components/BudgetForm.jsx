@@ -17,13 +17,13 @@ const BudgetForm = () => {
 
         if (!amount || amount < 0) return;
 
-        setMonthlyBudget(amount);
+        updateMonthlyBudget(amount);
     };
 
     const handleReset = () => {
         if (!window.confirm("Reset monthly budget?")) return;
 
-        setMonthlyBudget(0);
+        updateMonthlyBudget(0);
         setBudgetInput("");
     };
 

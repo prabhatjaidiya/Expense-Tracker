@@ -1,47 +1,131 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
+
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import AddExpense from "./pages/AddExpense";
 import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import { Link, useLocation } from "react-router-dom";
-import MobileNavbar from "./components/MobileNavbar";
 import Budget from "./pages/Budget";
 import Reports from "./pages/Reports";
 
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import MobileNavbar from "./components/MobileNavbar";
+import Profile from "./pages/Profile";
+
 const App = () => {
+  const location = useLocation();
+
+  const authRoutes = [
+    "/login",
+    "/register",
+    "/forgot-password",
+  ];
+
+  const isAuthPage = authRoutes.includes(location.pathname);
 
   return (
     <>
+      {!isAuthPage && <Navbar />}
 
-      <>
-        <Navbar />
-
-        <div className="flex">
-
-          {/* Sidebar - Hidden on mobile */}
+      <div className="flex">
+        {!isAuthPage && (
           <div className="hidden lg:block">
             <Sidebar />
           </div>
+        )}
 
-          {/* Main Content */}
-          <main className="flex-1 mx-3 mb-3 p-4 bg-white rounded-xl shadow overflow-y-auto h-[86vh]">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/add-expense/:id?" element={<AddExpense />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/report" element={<Reports />} />
-              <Route path="/budget" element={<Budget />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </main>
-        </div>
+        <main
+          className={
+            isAuthPage
+              ? "w-full min-h-screen"
+              : "flex-1 mx-3 mb-3 p-4 bg-white rounded-xl shadow overflow-y-auto h-[86vh]"
+          }
+        >
+          <Routes>
+            {/* Auth */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        <MobileNavbar />
-      </>
+            {/* App */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <Transactions />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-expense/:id?"
+              element={
+                <ProtectedRoute>
+                  <AddExpense />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/budget"
+              element={
+                <ProtectedRoute>
+                  <Budget />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute>
+                  <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <Navigate
+                  to={localStorage.getItem("isLoggedIn") ? "/" : "/login"}
+                  replace
+                />
+              }
+            />
+          </Routes>
+        </main>
+      </div>
+
+      {!isAuthPage && <MobileNavbar />}
     </>
   );
 };

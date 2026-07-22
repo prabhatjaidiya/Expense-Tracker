@@ -3,8 +3,12 @@ import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { GrTransaction, GrAdd } from "react-icons/gr";
 import { MdOutlineAnalytics } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
+import { FileBarChart } from "lucide-react";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const MobileNavbar = () => {
+  const { currentUser } = useContext(AuthContext)
   return (
     <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t shadow-lg z-50">
       <div className="flex justify-around items-center h-16">
@@ -12,8 +16,7 @@ const MobileNavbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `flex flex-col items-center text-xs ${
-              isActive ? "text-blue-600" : "text-gray-500"
+            `flex flex-col items-center text-xs ${isActive ? "text-blue-600" : "text-gray-500"
             }`
           }
         >
@@ -22,15 +25,14 @@ const MobileNavbar = () => {
         </NavLink>
 
         <NavLink
-          to="/transactions"
+          to="/analytics"
           className={({ isActive }) =>
-            `flex flex-col items-center text-xs ${
-              isActive ? "text-blue-600" : "text-gray-500"
+            `flex flex-col items-center text-xs ${isActive ? "text-blue-600" : "text-gray-500"
             }`
           }
         >
-          <GrTransaction size={20} />
-          Transactions
+          <MdOutlineAnalytics size={22} />
+          Analytics
         </NavLink>
 
         {/* Floating Add Button */}
@@ -41,27 +43,34 @@ const MobileNavbar = () => {
         </NavLink>
 
         <NavLink
-          to="/analytics"
+          to="/reports"
           className={({ isActive }) =>
-            `flex flex-col items-center text-xs ${
-              isActive ? "text-blue-600" : "text-gray-500"
+            `flex flex-col items-center text-xs ${isActive ? "text-blue-600" : "text-gray-500"
             }`
           }
         >
-          <MdOutlineAnalytics size={22} />
-          Analytics
+          <FileBarChart size={22} />
+          Reports
         </NavLink>
 
         <NavLink
-          to="/settings"
+          to="/profile"
           className={({ isActive }) =>
-            `flex flex-col items-center text-xs ${
-              isActive ? "text-blue-600" : "text-gray-500"
+            `flex flex-col items-center text-xs ${isActive ? "text-blue-600" : "text-gray-500"
             }`
           }
         >
-          <IoSettingsOutline size={22} />
-          Settings
+          <img
+            src={
+              currentUser?.avatar ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                currentUser?.fullName || "User"
+              )}`
+            }
+            alt={currentUser?.fullName || "User Avatar"}
+            className="w-7 h-7 rounded-full object-cover border border-white/20 shadow-lg"
+          />
+          Profile
         </NavLink>
 
       </div>

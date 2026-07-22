@@ -3,8 +3,8 @@ import { CgProfile } from "react-icons/cg";
 import { CiDark } from "react-icons/ci";
 import { useContext, useState } from "react";
 import ExpenseContext from "../context/ExpenseContext";
-import logo from "../assets/icons/icon.jpeg";
-import { Link, useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
+import { Link, Links, NavLink, useLocation, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -16,12 +16,13 @@ import {
 import exportCSV from "../utils/exportCSV";
 import exportPDF from "../utils/exportPDF";
 import ExportDropdown from "./ExportDropdown";
+import AuthContext from "../context/AuthContext";
 
 
 const Navbar = () => {
+  const { logout } = useContext(AuthContext);
   const {
     loadDemoData,
-    clearAllTransactions,
     transactions,
     dateRange,
     setDateRange,
@@ -33,6 +34,7 @@ const Navbar = () => {
 
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const pageTitlesDesktop = {
     "/": {
@@ -55,7 +57,7 @@ const Navbar = () => {
       title: "Budget Planning",
       subtitle: "Set budgets and monitor your spending."
     },
-    "/report": {
+    "/reports": {
       title: "Report",
       subtitle: "Export and review your financial reports."
     },
@@ -65,7 +67,7 @@ const Navbar = () => {
     },
   };
 
-  const isReportPage = location.pathname === "/report";
+  const isReportPage = location.pathname === "/reports";
 
   const currentPage =
     location.pathname.startsWith("/add-expense/")
@@ -84,7 +86,7 @@ const Navbar = () => {
     "/add-expense": "Add Transaction",
     "/analytics": "Analytics",
     "/settings": "Settings",
-    "/report": "Report"
+    "/reports": "Report"
   };
 
   const pageTitle =
@@ -102,13 +104,15 @@ const Navbar = () => {
 
           {/* Left */}
           <div className="flex items-center gap-3">
-            {/* Logo */}
-            <img src={logo} className="h-8 w-8 rounded-xl" />
+            <NavLink to="/">
+              {/* Logo */}
+              <img src={logo} className="h-12 w-12 rounded-xl" />
 
-            {/* Logo text (desktop only) */}
-            <h2 className="hidden lg:block font-semibold">
-              Expense Tracker
-            </h2>
+              {/* Logo text (desktop only) */}
+              <h2 className="hidden lg:block font-semibold">
+                Expense Tracker
+              </h2>
+            </NavLink>
 
             {/* Welcome (desktop) / Page name (mobile) */}
             <div className="lg:ml-12">
@@ -215,24 +219,7 @@ const Navbar = () => {
                     </button>
                   }
                 />
-                {transactions.length > 0 && (
-                  <>
-                    <button
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to delete all transactions?"
-                          )
-                        ) {
-                          clearAllTransactions();
-                        }
-                      }}
-                      className="lg:flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white lg:px-4 lg:py-2 px-2 py-1 rounded-lg transition duration-300 shadow hover:shadow-lg"
-                    >
-                      Clear Data
-                    </button>
-                  </>
-                )}
+                { isReportPage && <ExportDropdown />}
               </>
             )}
 

@@ -21,7 +21,7 @@ const IncomeExpenseTrend = () => {
     }, [monthlyIncomeExpenseData, range]);
 
     return (
-        <div className="bg-white w-full lg:w-1/2 rounded-2xl shadow-md p-6">
+        <div className="bg-white w-full lg:w-1/2 rounded-2xl shadow-md mb-4 p-6">
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
                 <div>
@@ -54,13 +54,14 @@ const IncomeExpenseTrend = () => {
                 </select>
             </div>
 
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={340}>
                 <ComposedChart
                     data={chartData}
                     margin={{
                         top: 10,
                         right: 20,
-                        left: 10
+                        left: 0,
+                        bottom: 10,
                     }}
                 >
                     <defs>
@@ -100,6 +101,7 @@ const IncomeExpenseTrend = () => {
 
                     <Tooltip
                         contentStyle={{
+                            background: "#fff",
                             borderRadius: "10px",
                             border: "none",
                             boxShadow: "0 4px 12px rgba(0,0,0,.1)",

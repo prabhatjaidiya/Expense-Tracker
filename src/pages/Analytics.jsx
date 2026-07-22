@@ -11,12 +11,12 @@ const Analytics = () => {
   return (
     <div>
       <Hero />
-      <div className='max-w-7xl lg:flex lg:gap-4 mx-auto px-4 sm:px-6 lg:px-4'>
+      <div className='max-w-7xl lg:flex lg:gap-4 mx-auto sm:px-6 lg:px-4'>
         <IncomeExpenseTrend />
         <ExpenseCategoryChartAnalytics />
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-4 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6 items-start">
           <SavingsTrendCard />
           <TopSpendingCategories />
         </div>

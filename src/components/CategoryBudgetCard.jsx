@@ -3,8 +3,7 @@ import ExpenseContext from "../context/ExpenseContext";
 import { Check, Pencil, Settings, X } from "lucide-react";
 
 const CategoryBudgetTable = () => {
-    const { categoryBudgetSummary, setCategoryBudgets } = useContext(ExpenseContext);
-    console.log(categoryBudgetSummary);
+    const { categoryBudgetSummary, updateCategoryBudget } = useContext(ExpenseContext);
 
     const [manageMode, setManageMode] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
@@ -70,10 +69,7 @@ const CategoryBudgetTable = () => {
             Number(budgetInputs[category]) || 0
         );
 
-        setCategoryBudgets((prev) => ({
-            ...prev,
-            [category]: newBudget,
-        }));
+        updateCategoryBudget(category, newBudget);
 
         setEditingCategory(null);
     };
@@ -89,16 +85,13 @@ const CategoryBudgetTable = () => {
     };
 
     const handleSaveAll = () => {
-        const updatedBudgets = {};
-
         Object.keys(budgetInputs).forEach((category) => {
-            updatedBudgets[category] = Math.max(
-                0,
-                Number(budgetInputs[category]) || 0
+            updateCategoryBudget(
+                category,
+                Math.max(0, Number(budgetInputs[category]) || 0)
             );
         });
 
-        setCategoryBudgets(updatedBudgets);
         setManageMode(false);
     };
 
@@ -128,9 +121,9 @@ const CategoryBudgetTable = () => {
                             disabled={!hasChanges}
                             className={`px-4 py-2 text-sm rounded-xl transition
                             ${hasChanges
-                                ? "bg-green-500 text-white hover:bg-green-600"
-                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            }`}
+                                    ? "bg-green-500 text-white hover:bg-green-600"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                }`}
                         >
                             Save All
                         </button>
@@ -228,7 +221,7 @@ const CategoryBudgetTable = () => {
                                         ) : item.budget === 0 ? (
                                             <span className="text-gray-400">Not Set</span>
                                         ) : (
-                                            `₹${item.budget.toLocaleString()}`
+                                            `₹${item.budget?.toLocaleString()}`
                                         )}
                                     </td>
 
@@ -340,7 +333,7 @@ const CategoryBudgetTable = () => {
                                         <span className="font-semibold">
                                             {item.budget === 0
                                                 ? "Not Set"
-                                                : `₹${item.budget.toLocaleString()}`}
+                                                : `₹${item.budget?.toLocaleString()}`}
                                         </span>
                                     )}
                                 </div>

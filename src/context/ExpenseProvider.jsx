@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import ExpenseContext from "./ExpenseContext";
 import transactionsData from "../data/transactionsData";
 import {
@@ -11,6 +11,7 @@ import {
   GraduationCap,
   HelpCircle,
 } from "lucide-react";
+import AuthContext from "./AuthContext";
 
 const MONTHS = Array.from({ length: 12 }, (_, index) => {
   const date = new Date();
@@ -33,11 +34,21 @@ const categoryIcons = {
 
 const ExpenseProvider = ({ children }) => {
 
-  const [transactions, setTransactions] = useState(() => {
+  const { currentUser } = useContext(AuthContext);
+
+  const [allTransactions, setAllTransactions] = useState(() => {
     const storedTransactions = localStorage.getItem("transactions");
 
     return storedTransactions ? JSON.parse(storedTransactions) : [];
   });
+
+  const transactions = useMemo(() => {
+    if (!currentUser) return [];
+
+    return allTransactions.filter(
+      (transaction) => transaction.userId === currentUser.id
+    );
+  }, [allTransactions, currentUser]);
 
   const [dateRange, setDateRange] = useState({
     startDate: new Date(new Date().getFullYear(), 0, 1),
@@ -63,22 +74,28 @@ const ExpenseProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem(
       "transactions",
-      JSON.stringify(transactions)
+      JSON.stringify(allTransactions)
     );
-  }, [transactions]);
+  }, [allTransactions]);
 
   const addTransaction = useCallback((transaction) => {
-    setTransactions((prev) => [transaction, ...prev]);
-  }, []);
+    setAllTransactions((prev) => [
+      {
+        ...transaction,
+        userId: currentUser.id,
+      },
+      ...prev,
+    ]);
+  }, [currentUser]);
 
   const deleteTransaction = useCallback((id) => {
-    setTransactions((prev) =>
+    setAllTransactions((prev) =>
       prev.filter((item) => item.id !== id)
     );
   }, []);
 
   const updateTransaction = useCallback((id, updatedTransaction) => {
-    setTransactions((prev) =>
+    setAllTransactions((prev) =>
       prev.map((item) =>
         item.id === id
           ? { ...item, ...updatedTransaction }
@@ -255,64 +272,140 @@ const ExpenseProvider = ({ children }) => {
   }, [filteredTransactions, totalIncome])
 
   const loadDemoData = () => {
-    setTransactions(transactionsData);
+    const demoTransactions = transactionsData.map((transaction) => ({
+      ...transaction,
+      id: Date.now() + Math.random(),
+      userId: currentUser.id,
+    }));
+
+    setAllTransactions((prev) => [
+      ...demoTransactions,
+      ...prev,
+    ]);
   };
 
   const clearAllTransactions = () => {
-    setTransactions([]);
-    setMonthlyBudget(0);
-    setCategoryBudgets({
-      Food: 0,
-      Shopping: 0,
-      Transport: 0,
-      Bills: 0,
-      Entertainment: 0,
-      Health: 0,
-      Education: 0,
-    });
+    setAllTransactions((prev) =>
+      prev.filter(
+        (transaction) => transaction.userId !== currentUser.id
+      )
+    );
+    setAllMonthlyBudgets((prev) =>
+      prev.filter(
+        (item) => item.userId !== currentUser.id
+      )
+    );
+    setAllCategoryBudgets((prev) =>
+      prev.filter(
+        (item) => item.userId !== currentUser.id
+      )
+    );
   };
 
-  const [monthlyBudget, setMonthlyBudget] = useState(
-    Number(localStorage.getItem("monthlyBudget")) || 0
-  );
+  const [allMonthlyBudgets, setAllMonthlyBudgets] = useState(() => {
+    return JSON.parse(localStorage.getItem("monthlyBudgets")) || [];
+  });
 
-  const [categoryBudgets, setCategoryBudgets] = useState(
-    JSON.parse(localStorage.getItem("categoryBudgets")) || {
-      Food: 0,
-      Shopping: 0,
-      Transport: 0,
-      Bills: 0,
-      Entertainment: 0,
-      Health: 0,
-      Education: 0,
-    }
-  );
+  const monthlyBudget = useMemo(() => {
+    if (!currentUser) return 0;
+
+    const userBudget = allMonthlyBudgets.find(
+      (item) => item.userId === currentUser.id
+    );
+
+    return userBudget ? userBudget.budget : 0;
+  }, [allMonthlyBudgets, currentUser]);
+
+  const defaultCategoryBudgets = {
+    Food: 0,
+    Shopping: 0,
+    Transport: 0,
+    Bills: 0,
+    Entertainment: 0,
+    Health: 0,
+    Education: 0,
+  };
+
+  const [allCategoryBudgets, setAllCategoryBudgets] = useState(() => {
+    return JSON.parse(localStorage.getItem("allCategoryBudgets")) || [];
+  });
 
   useEffect(() => {
-    localStorage.setItem("monthlyBudget", monthlyBudget);
-  }, [monthlyBudget]);
+    localStorage.setItem(
+      "monthlyBudgets",
+      JSON.stringify(allMonthlyBudgets)
+    );
+  }, [allMonthlyBudgets]);
 
   useEffect(() => {
     localStorage.setItem(
       "categoryBudgets",
-      JSON.stringify(categoryBudgets)
+      JSON.stringify(allCategoryBudgets)
     );
-  }, [categoryBudgets]);
+  }, [allCategoryBudgets]);
 
-  const updateMonthlyBudget = useCallback((amount) => {
-    setMonthlyBudget(Number(amount));
-  }, []);
+  const categoryBudgets = useMemo(() => {
+    if (!currentUser) return defaultCategoryBudgets;
+
+    const userBudget = allCategoryBudgets.find(
+      (item) => item.userId === currentUser.id
+    );
+
+    return userBudget
+      ? userBudget.budgets
+      : defaultCategoryBudgets;
+  }, [allCategoryBudgets, currentUser]);
+
+  const updateMonthlyBudget = useCallback(
+    (amount) => {
+      setAllMonthlyBudgets((prev) => {
+        const otherUsers = prev.filter(
+          (item) => item.userId !== currentUser.id
+        );
+
+        return [
+          ...otherUsers,
+          {
+            userId: currentUser.id,
+            budget: Number(amount),
+          },
+        ];
+      });
+    },
+    [currentUser]
+  );
 
   const resetMonthlyBudget = useCallback(() => {
-    setMonthlyBudget(0);
-  }, []);
+    setAllMonthlyBudgets((prev) =>
+      prev.filter((item) => item.userId !== currentUser.id)
+    );
+  }, [currentUser]);
 
-  const updateCategoryBudget = useCallback((category, amount) => {
-    setCategoryBudgets((prev) => ({
-      ...prev,
-      [category]: Number(amount),
-    })), []
-  });
+  const updateCategoryBudget = useCallback(
+    (category, amount) => {
+      setAllCategoryBudgets((prev) => {
+        const otherUsers = prev.filter(
+          (item) => item.userId !== currentUser.id
+        );
+
+        const currentUserBudget =
+          prev.find((item) => item.userId === currentUser.id)?.budgets ||
+          defaultCategoryBudgets;
+
+        return [
+          ...otherUsers,
+          {
+            userId: currentUser.id,
+            budgets: {
+              ...currentUserBudget,
+              [category]: Number(amount),
+            },
+          },
+        ];
+      });
+    },
+    [currentUser]
+  );
 
   const currentMonthSpent = filteredTransactions.filter((transaction) => {
     const date = new Date(transaction.date);
@@ -452,20 +545,6 @@ const ExpenseProvider = ({ children }) => {
 
     return topSpendingCategories[0];
   }, [topSpendingCategories]);
-
-  const [budget, setBudget] = useState(() => {
-    return Number(localStorage.getItem("budget")) || 0;
-  });
-
-  const saveBudget = (amount) => {
-    setBudget(Number(amount));
-    localStorage.setItem("budget", amount);
-  };
-
-  const resetBudget = () => {
-    setBudget(0);
-    localStorage.removeItem("budget");
-  };
 
   const budgetAlerts = useMemo(() => {
     return categoryBudgetSummary
@@ -660,11 +739,9 @@ const ExpenseProvider = ({ children }) => {
 
         monthlySummary,
 
-        budget,
         currentMonthSpent,
         budgetSummary,
         monthlyBudget,
-        setMonthlyBudget,
         updateMonthlyBudget,
         resetMonthlyBudget,
 
@@ -674,7 +751,6 @@ const ExpenseProvider = ({ children }) => {
         spendingInsights,
 
         categoryBudgetSummary,
-        setCategoryBudgets,
         updateCategoryBudget,
 
         highestExpense,
