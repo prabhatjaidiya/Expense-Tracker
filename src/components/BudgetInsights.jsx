@@ -78,9 +78,9 @@ const BudgetInsights = () => {
   const hasData = chartData.some(item => item.value > 0);
 
   return (
-    <div className="flex flex-col md:flex-wrap flex-1 h-min mt-6 bg-white rounded-2xl border border-gray-200 p-6 shadow-md">
+    <div className="flex flex-col md:flex-wrap flex-1 h-min mt-6 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-md transition-colors">
 
-      <h2 className="text-xl font-semibold text-gray-800 mb-6">
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-6">
         Budget Insights
       </h2>
 
@@ -109,8 +109,10 @@ const BudgetInsights = () => {
               </Pie>
             </PieChart>
           ) : (
-            <div className="w-[220px] h-[220px] flex items-center justify-center rounded-full border-8 border-gray-200">
-              <span className="text-gray-400">No Data</span>
+            <div className="w-[220px] h-[220px] flex items-center justify-center rounded-full border-8 border-gray-200 dark:border-gray-700">
+              <span className="text-gray-400 dark:text-gray-500">
+                No Data
+              </span>
             </div>
           )}
 
@@ -118,7 +120,7 @@ const BudgetInsights = () => {
             <h1 className={`text-5xl font-bold ${percentageColor}`}>
               {totalUsed}%
             </h1>
-            <p className="text-gray-500 font-medium">
+            <p className="text-gray-500 dark:text-gray-400 font-medium">
               Total Used
             </p>
           </div>
@@ -135,12 +137,12 @@ const BudgetInsights = () => {
                 <span
                   className={`w-5 h-3 rounded-full ${item.color}`}
                 />
-                <span className="text-lg font-medium">
+                <span className="text-lg font-medium text-gray-800 dark:text-white">
                   {item.label}
                 </span>
               </div>
 
-              <span className="text-gray-500">
+              <span className="text-gray-500 dark:text-gray-400">
                 {item.count}{" "}
                 {item.count === 1 ? "Category" : "Categories"}
               </span>
@@ -152,9 +154,9 @@ const BudgetInsights = () => {
 
       {/* Insight Card */}
 
-      <div className="mt-8 rounded-xl border border-yellow-200 bg-yellow-50 p-5 flex gap-4">
+      <div className="mt-8 rounded-xl border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 p-5 flex gap-4 transition-colors">
 
-        <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
           <Lightbulb
             className="text-yellow-500"
             size={24}
@@ -162,11 +164,11 @@ const BudgetInsights = () => {
         </div>
 
         <div>
-          <h3 className="font-semibold text-lg text-gray-800">
+          <h3 className="font-semibold text-lg text-gray-800 dark:text-white">
             Insight
           </h3>
 
-          <p className="text-gray-600 mt-1 leading-7">
+          <p className="text-gray-600 mt-1 leading-7 dark:text-gray-300">
             {insight}
           </p>
         </div>

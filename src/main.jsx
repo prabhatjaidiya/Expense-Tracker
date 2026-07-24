@@ -7,23 +7,26 @@ import ExpenseProvider from './context/ExpenseProvider.jsx'
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ThemeProvider from "./context/ThemeProvider";
 import AuthProvider from "./context/AuthProvider";
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
-        <AuthProvider>
-            <ExpenseProvider>
-                <App />
-                <ToastContainer
-                    position="top-right"
-                    autoClose={2500}
-                    hideProgressBar={false}
-                    newestOnTop
-                    closeOnClick
-                    pauseOnHover
-                    theme="light"
-                />
-            </ExpenseProvider>
-        </AuthProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+        <BrowserRouter>
+            <AuthProvider>
+                <ExpenseProvider>
+                    <App />
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={2500}
+                        hideProgressBar={false}
+                        newestOnTop
+                        closeOnClick
+                        pauseOnHover
+                        theme="light"
+                    />
+                </ExpenseProvider>
+            </AuthProvider>
+        </BrowserRouter>
+    </ThemeProvider>
 )

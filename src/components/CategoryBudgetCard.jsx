@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import ExpenseContext from "../context/ExpenseContext";
-import { Check, Pencil, Settings, X } from "lucide-react";
+import { Check, Settings, Pencil, X } from "lucide-react";
 
 const CategoryBudgetTable = () => {
     const { categoryBudgetSummary, updateCategoryBudget } = useContext(ExpenseContext);
@@ -102,17 +102,17 @@ const CategoryBudgetTable = () => {
 
     if (!categoryBudgetSummary.length) {
         return (
-            <div className="bg-white rounded-2xl p-10 text-center text-gray-500">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-10 text-center text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">
                 No category budgets found.
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden m-2">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors">
             {/* Header */}
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between p-6 border-b">
-                <h2 className="text-2xl font-bold">Category Budgets</h2>
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Category Budgets</h2>
 
                 {manageMode ? (
                     <div className="flex gap-2">
@@ -122,7 +122,7 @@ const CategoryBudgetTable = () => {
                             className={`px-4 py-2 text-sm rounded-xl transition
                             ${hasChanges
                                     ? "bg-green-500 text-white hover:bg-green-600"
-                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    : "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                                 }`}
                         >
                             Save All
@@ -133,7 +133,7 @@ const CategoryBudgetTable = () => {
                                 setManageMode(false);
                                 setBudgetInputs({});
                             }}
-                            className="px-4 py-2 text-sm border rounded-xl"
+                            className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                         >
                             Cancel
                         </button>
@@ -141,7 +141,7 @@ const CategoryBudgetTable = () => {
                 ) : (
                     <button
                         onClick={() => setManageMode(true)}
-                        className="flex items-center gap-2 px-4 py-2 border rounded-xl hover:bg-gray-100"
+                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200 transition"
                     >
                         <Settings size={18} />
                         Manage Categories
@@ -152,8 +152,8 @@ const CategoryBudgetTable = () => {
             {/* Table */}
             <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full">
-                    <thead className="border-b">
-                        <tr className="text-left text-gray-600">
+                    <thead className="border-b border-gray-200 dark:border-gray-700">
+                        <tr className="text-left text-gray-600 dark:text-gray-300">
                             <th className="p-5">Category</th>
                             <th>Budget</th>
                             <th>Spent</th>
@@ -176,7 +176,7 @@ const CategoryBudgetTable = () => {
                             return (
                                 <tr
                                     key={item.category}
-                                    className={`border-b last:border-none hover:bg-gray-50 ${item.budget === 0 ? "opacity-70" : ""
+                                    className={`border-b border-gray-200 dark:border-gray-700 last:border-none hover:bg-gray-50 dark:hover:bg-gray-800 transition ${item.budget === 0 ? "opacity-70" : ""
                                         }`}
                                 >
                                     {/* Category */}
@@ -189,10 +189,10 @@ const CategoryBudgetTable = () => {
                                             </div>
 
                                             <div>
-                                                <p className="font-medium text-lg">{item.category}</p>
+                                                <p className="font-medium text-lg text-gray-900 dark:text-white">{item.category}</p>
 
                                                 {item.budget === 0 && (
-                                                    <p className="text-xs text-gray-400">
+                                                    <p className="text-xs text-gray-400 dark:text-gray-500">
                                                         Budget not configured
                                                     </p>
                                                 )}
@@ -201,7 +201,7 @@ const CategoryBudgetTable = () => {
                                     </td>
 
                                     {/* Budget */}
-                                    <td className="font-semibold">
+                                    <td className="font-semibold text-gray-900 dark:text-white">
                                         {manageMode || editingCategory === item.category ? (
                                             <input
                                                 ref={editingCategory === item.category ? inputRef : null}
@@ -216,10 +216,10 @@ const CategoryBudgetTable = () => {
                                                     }))
                                                 }
                                                 onKeyDown={(e) => handleKeyDown(e, item.category)}
-                                                className="w-28 border rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-28 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             />
                                         ) : item.budget === 0 ? (
-                                            <span className="text-gray-400">Not Set</span>
+                                            <span className="text-gray-400  dark:text-gray-500">Not Set</span>
                                         ) : (
                                             `₹${item.budget?.toLocaleString()}`
                                         )}
@@ -231,7 +231,7 @@ const CategoryBudgetTable = () => {
                                     </td>
 
                                     {/* Remaining */}
-                                    <td className="font-semibold">
+                                    <td className="font-semibold text-gray-900 dark:text-white">
                                         {item.budget === 0 ? (
                                             <span className="text-gray-400">—</span>
                                         ) : (
@@ -248,17 +248,17 @@ const CategoryBudgetTable = () => {
                                     {/* Usage */}
                                     <td>
                                         {item.budget === 0 ? (
-                                            <span className="text-sm text-gray-400">No Budget</span>
+                                            <span className="text-sm text-gray-400 dark:text-gray-500">No Budget</span>
                                         ) : (
                                             <div className="flex items-center gap-4 min-w-[220px]">
-                                                <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                                     <div
                                                         className={`h-full ${getProgressColor(percentage)}`}
                                                         style={{ width: `${progress}%` }}
                                                     />
                                                 </div>
 
-                                                <span className="w-10">{Math.min(percentage, 100)}%</span>
+                                                <span className="w-10 text-gray-700 dark:text-gray-300">{Math.min(percentage, 100)}%</span>
                                             </div>
                                         )}
                                     </td>
@@ -284,7 +284,7 @@ const CategoryBudgetTable = () => {
                     return (
                         <div
                             key={item.category}
-                            className="bg-white rounded-xl border shadow-sm p-4"
+                            className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 transition-colors"
                         >
                             {/* Header */}
                             <div className="flex items-center gap-3 mb-4">
@@ -298,12 +298,12 @@ const CategoryBudgetTable = () => {
                                 </div>
 
                                 <div>
-                                    <h3 className="font-semibold">
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">
                                         {item.category}
                                     </h3>
 
                                     {item.budget === 0 && (
-                                        <p className="text-xs text-gray-400">
+                                        <p className="text-xs text-gray-400 dark:text-gray-500">
                                             Budget not configured
                                         </p>
                                     )}
@@ -315,7 +315,7 @@ const CategoryBudgetTable = () => {
                             <div className="space-y-2 text-sm">
 
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">Budget</span>
+                                    <span className="text-gray-500 dark:text-gray-400">Budget</span>
 
                                     {manageMode || editingCategory === item.category ? (
                                         <input
@@ -327,10 +327,10 @@ const CategoryBudgetTable = () => {
                                                     [item.category]: e.target.value,
                                                 }))
                                             }
-                                            className="w-28 border rounded-lg px-2 py-1 text-right"
+                                            className="w-28 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 text-right bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                                         />
                                     ) : (
-                                        <span className="font-semibold">
+                                        <span className="font-semibold text-gray-900 dark:text-whit">
                                             {item.budget === 0
                                                 ? "Not Set"
                                                 : `₹${item.budget?.toLocaleString()}`}
@@ -339,7 +339,7 @@ const CategoryBudgetTable = () => {
                                 </div>
 
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">
+                                    <span className="text-gray-500 dark:text-gray-400">
                                         Spent
                                     </span>
 
@@ -349,7 +349,7 @@ const CategoryBudgetTable = () => {
                                 </div>
 
                                 <div className="flex justify-between">
-                                    <span className="text-gray-500">
+                                    <span className="text-gray-500 dark:text-gray-400">
                                         Remaining
                                     </span>
 
@@ -371,13 +371,13 @@ const CategoryBudgetTable = () => {
 
                             {item.budget > 0 && (
                                 <div className="mt-4">
-                                    <div className="flex justify-between mb-1 text-sm">
+                                    <div className="flex justify-between mb-1 text-sm text-gray-700 dark:text-gray-300">
                                         <span>Usage</span>
 
                                         <span>{percentage}%</span>
                                     </div>
 
-                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
                                             className={`h-full ${getProgressColor(
                                                 percentage
@@ -396,14 +396,14 @@ const CategoryBudgetTable = () => {
                                 <div className="grid grid-cols-2 gap-3 mt-4">
                                     <button
                                         onClick={() => handleSave(item.category)}
-                                        className="bg-green-500 text-white py-2 rounded-lg"
+                                        className="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition"
                                     >
                                         Save
                                     </button>
 
                                     <button
                                         onClick={handleCancel}
-                                        className="bg-gray-200 py-2 rounded-lg"
+                                        className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                                     >
                                         Cancel
                                     </button>
@@ -411,7 +411,7 @@ const CategoryBudgetTable = () => {
                             ) : (
                                 <button
                                     onClick={() => handleEdit(item)}
-                                    className="w-full mt-4 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 rounded-lg py-2"
+                                    className="w-full mt-4 flex items-center justify-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg py-2 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition"
                                 >
                                     <Pencil size={16} />
                                     {item.budget === 0 ? "Set Budget" : "Edit Budget"}

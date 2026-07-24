@@ -66,7 +66,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-2 gap-4 lg:gap-6 sm:grid-cols-2 xl:grid-cols-4">
             <AnalyticsCards
               icon={
-                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                   <FaArrowTrendUp className="text-md lg:text-2xl text-green-600" />
                 </div>
               }
@@ -77,7 +77,7 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
                   <FaArrowTrendDown className="text-md lg:text-2xl text-red-600" />
                 </div>
               }
@@ -88,7 +88,7 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
                   <HiOutlineChartBar className="text-md lg:text-2xl text-orange-600" />
                 </div>
               }
@@ -99,7 +99,7 @@ const Dashboard = () => {
 
             <AnalyticsCards
               icon={
-                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                   <MdOutlineSavings className="text-md lg:text-2xl text-blue-600" />
                 </div>
               }

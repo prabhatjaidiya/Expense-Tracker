@@ -1,36 +1,12 @@
-import { Search } from "lucide-react";
-
 const SearchBox = ({ searchTerm, setSearchTerm }) => {
   return (
-    <div className="relative w-full max-w-sm">
-      <Search
-        size={18}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-      />
-
+    <div className="w-full max-w-sm">
       <input
         type="text"
         placeholder="Search transactions..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="
-          w-full
-          pl-11
-          pr-4
-          py-3
-          rounded-xl
-          bg-gray-100
-          border
-          border-transparent
-          outline-none
-          transition-all
-          duration-300
-          focus:bg-white
-          focus:border-blue-500
-          focus:ring-4
-          focus:ring-blue-100
-          placeholder:text-gray-400
-        "
+        className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-gray-900 placeholder:text-gray-400 shadow-sm transition-all duration-200 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
       />
     </div>
   );

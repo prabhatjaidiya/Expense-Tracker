@@ -39,7 +39,7 @@ const RecentTransactions = () => {
     .slice(0, 5);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
+    <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:border dark:text-white rounded-2xl shadow-lg p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Recent Activity</h2>
@@ -55,13 +55,13 @@ const RecentTransactions = () => {
         return (
           <div
             key={transaction.id}
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 rounded-xl px-3 transition-all duration-200"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 border-b border-gray-100 dark:border-gray-800 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl px-3 transition-all duration-200"
           >
             <div className="flex items-center gap-4 flex-1 flex-wrap">
               <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
                 {getCategoryIcon(transaction.category)}
               </div>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-gray-800 dark:text-gray-100">
                 {transaction.title}
               </span>
               <span

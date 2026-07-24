@@ -9,9 +9,11 @@ import {
   Tooltip,
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
+import ThemeContext from "../context/ThemeContext";
 
 
 const SavingsTrendChart = () => {
+  const { theme } = useContext(ThemeContext);
 
   const { monthlySavingsData } = useContext(ExpenseContext);
 
@@ -37,23 +39,41 @@ const SavingsTrendChart = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-4">
-          <p className="text-gray-600 border-b pb-2 mb-2">
+        <div
+          className="rounded-xl shadow-lg p-4"
+          style={{
+            backgroundColor: colors.tooltipBg,
+            border: `1px solid ${colors.tooltipBorder}`,
+            color: colors.tooltipText,
+          }}
+        >
+          <p
+            style={{ color: colors.tooltipText }}
+            className="border-b pb-2 mb-2"
+          >
             {label}
           </p>
 
-          <p className="text-green-600 font-bold">
+          <p className="font-bold text-green-500">
             ₹ {payload[0].value.toLocaleString("en-IN")}
           </p>
         </div>
       );
     }
 
-
-
     return null;
   };
 
+  const isDark = theme === "dark";
+
+  const colors = {
+    grid: isDark ? "#374151" : "#E5E7EB",
+    axis: isDark ? "#9CA3AF" : "#6B7280",
+    tooltipBg: isDark ? "#1F2937" : "#FFFFFF",
+    tooltipBorder: isDark ? "#374151" : "#E5E7EB",
+    tooltipText: isDark ? "#F9FAFB" : "#111827",
+    dotStroke: isDark ? "#111827" : "#FFFFFF",
+  };
   if (!monthlySavingsData.length) {
     return (
       <div className="bg-white rounded-2xl shadow-md p-6 text-center text-gray-500">
@@ -62,15 +82,16 @@ const SavingsTrendChart = () => {
     );
   }
 
+
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
+    <div className="bg-white text-black dark:border dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl shadow-md p-6">
 
       {/* Header */}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
 
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
             Savings Trend
           </h2>
 
@@ -82,7 +103,7 @@ const SavingsTrendChart = () => {
         <select
           value={range}
           onChange={(e) => setRange(Number(e.target.value))}
-          className="border rounded-lg px-3 w-min py-2 text-sm outline-none cursor-pointer"
+          className="border rounded-lg text-black dark:bg-gray-900 dark:border-gray-800 dark:text-white px-3 w-min py-2 text-sm outline-none cursor-pointer"
         >
           <option value={1}>This Month</option>
           <option value={3}>Last 3 Months</option>
@@ -130,14 +151,17 @@ const SavingsTrendChart = () => {
             </defs>
 
             <CartesianGrid
-              stroke="#E5E7EB"
-              strokeDasharray="4 4" />
+              stroke={colors.grid}
+              strokeDasharray="4 4"
+            />
 
             <XAxis dataKey="month"
+              tick={{ fill: colors.axis }}
               tickLine={false}
               axisLine={false} />
 
             <YAxis
+              tick={{ fill: colors.axis }}
               tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}K`}
               tickLine={false}
               axisLine={false} />
@@ -152,13 +176,15 @@ const SavingsTrendChart = () => {
               fill="url(#savingsGradient)"
               dot={{
                 r: 4,
-                fill: "#22C55E",
-                stroke: "#fff",
+                fill: chartColor,
+                stroke: colors.dotStroke,
                 strokeWidth: 2,
               }}
               activeDot={{
                 r: 7,
-                fill: "#22C55E",
+                fill: chartColor,
+                stroke: colors.dotStroke,
+                strokeWidth: 2,
               }}
               animationDuration={1000}
             />

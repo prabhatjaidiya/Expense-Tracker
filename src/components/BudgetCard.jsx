@@ -31,8 +31,10 @@ const BudgetSummaryCard = () => {
         setEditing(false);
     };
 
+    const size = window.innerWidth >= 1024 ? 180 : 140;
+
     return (
-        <div className="bg-white rounded-3xl border shadow-sm p-4 sm:p-6">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl shadow-sm p-4 sm:p-6">
 
             <div className="flex flex-col lg:flex-row justify-between gap-8">
 
@@ -40,45 +42,49 @@ const BudgetSummaryCard = () => {
 
                 <div className="flex-1">
 
-                    <h2 className="text-xl font-semibold mb-6">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
                         Monthly Budget
                     </h2>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x">
 
                         <div className="pr-8">
-                            <p className="text-gray-500 mb-2">Budget</p>
+                            <p className="text-gray-500 dark:text-gray-400 mb-2">Budget</p>
 
                             {editing ? (
                                 <input
                                     type="number"
                                     value={budgetInput}
                                     onChange={(e) => setBudgetInput(e.target.value)}
-                                    className="border rounded-lg px-3 py-2 w-full max-w-[180px]"
+                                    className="w-full max-w-[180px] rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                             ) : (
-                                <h2 className="text-3xl sm:text-4xl font-bold break-words">
+                                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white break-words">
                                     ₹{monthlyBudget.toLocaleString()}
                                 </h2>
                             )}
                         </div>
 
                         <div className="px-8">
-                            <p className="text-gray-500 mb-2">
+                            <p className="text-gray-500 dark:text-gray-400 mb-2">
                                 Total Spent
                             </p>
 
-                            <h2 className="text-2xl sm:text-3xl font-bold text-red-500">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-red-500 dark:text-red-400">
                                 {budgetSummary.spent.toLocaleString()}
                             </h2>
                         </div>
 
                         <div className="px-8">
-                            <p className="text-gray-500 mb-2">
+                            <p className="text-gray-500 dark:text-gray-400 mb-2">
                                 Remaining
                             </p>
 
-                            <h2 className={`text-2xl sm:text-3xl font-bold ${budgetSummary.remaining >= 0 ? "text-green-500" : "text-red-500"}`}>
+                            <h2 className={`text-2xl sm:text-3xl font-bold ${budgetSummary.remaining >= 0
+                                ? "text-green-500 dark:text-green-400"
+                                : "text-red-500 dark:text-red-400"
+                                }`}
+                            >
                                 {budgetSummary.remaining.toLocaleString()}
                             </h2>
                         </div>
@@ -94,7 +100,7 @@ const BudgetSummaryCard = () => {
 
                                 <button
                                     onClick={handleSave}
-                                    className="w-full sm:w-auto px-5 py-2 rounded-xl bg-green-500 text-white flex items-center gap-2"
+                                    className="w-full sm:w-auto px-5 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-2 transition"
                                 >
                                     <Check size={18} />
                                     Save
@@ -102,7 +108,7 @@ const BudgetSummaryCard = () => {
 
                                 <button
                                     onClick={handleCancel}
-                                    className="w-full sm:w-auto px-5 py-2 rounded-xl border flex items-center gap-2"
+                                    className="w-full sm:w-auto px-5 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center gap-2 transition"
                                 >
                                     <X size={18} />
                                     Cancel
@@ -112,7 +118,7 @@ const BudgetSummaryCard = () => {
                         ) : (
                             <button
                                 onClick={() => setEditing(true)}
-                                className="w-full sm:w-auto px-5 py-3 rounded-xl border flex justify-center items-center gap-2 hover:bg-gray-50"
+                                className="w-full sm:w-auto px-5 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex justify-center items-center gap-2 transition"
                             >
                                 <Pencil size={18} />
                                 Edit Budget
@@ -125,7 +131,7 @@ const BudgetSummaryCard = () => {
 
                     <div className="mt-8">
 
-                        <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
 
                             <div
                                 style={{
@@ -137,7 +143,7 @@ const BudgetSummaryCard = () => {
 
                         </div>
 
-                        <div className="flex justify-between mt-2 text-gray-500 font-medium">
+                        <div className="flex justify-between mt-2 text-gray-500 dark:text-gray-400 font-medium">
 
                             <span>₹0</span>
 
@@ -158,7 +164,7 @@ const BudgetSummaryCard = () => {
                     <BudgetProgressCircle
                         percentage={budgetSummary.percentage}
                         progressColor={getProgressColor(budgetSummary.percentage)}
-                        size={window.innerWidth < 640 ? 140 : 180}
+                        size={size}
                     />
 
                 </div>

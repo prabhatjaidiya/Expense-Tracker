@@ -99,7 +99,7 @@ const Register = () => {
         >
           {/* Full Name */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Full Name
             </label>
 
@@ -109,7 +109,7 @@ const Register = () => {
               placeholder="Enter your full name"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+              className=" w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
             />
             {errors.fullName && (
               <p className="mt-1 text-sm text-red-500">
@@ -120,7 +120,7 @@ const Register = () => {
 
           {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
 
@@ -130,7 +130,7 @@ const Register = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+              className=" w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">
@@ -141,7 +141,7 @@ const Register = () => {
 
           {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
 
@@ -156,14 +156,14 @@ const Register = () => {
             />
             {formData.password && (
               <div className="mt-2">
-                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 ${passwordStrength.color}`}
                     style={{ width: passwordStrength.width }}
                   />
                 </div>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                   Password Strength:
                   <span className="font-semibold ml-1">
                     {passwordStrength.label}
@@ -180,7 +180,7 @@ const Register = () => {
 
           {/* Confirm Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Confirm Password
             </label>
 
@@ -202,13 +202,13 @@ const Register = () => {
           </div>
 
           {/* Terms */}
-          <label className="flex items-start gap-2 text-sm text-gray-600">
+          <label className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
             <input
               type="checkbox"
               name="acceptTerms"
               checked={formData.acceptTerms}
               onChange={handleChange}
-              className="mt-1"
+              className="mt-1 accent-indigo-600"
             />
             {errors.acceptTerms && (
               <p className="text-sm text-red-500">
@@ -218,7 +218,7 @@ const Register = () => {
 
             <span>
               I agree to the{" "}
-              <span className="text-indigo-600 cursor-pointer">
+              <span className="text-indigo-600 dark:text-indigo-400 cursor-pointer">
                 Terms & Conditions
               </span>
             </span>
@@ -241,11 +241,11 @@ const Register = () => {
           </button>
 
           {/* Login Link */}
-          <p className="text-center text-gray-500">
+          <p className="text-center text-gray-500 dark:text-gray-400">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-indigo-600 font-medium"
+              className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline"
             >
               Login
             </Link>

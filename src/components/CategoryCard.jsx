@@ -14,7 +14,7 @@ const CategoryCard = () => {
 
   if (!topSpendingCategories.length) {
     return (
-      <div className="bg-white rounded-2xl shadow-md p-6 text-center text-gray-500">
+      <div className="bg-white border-gray-200 dark:border dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl shadow-md p-6 text-center text-gray-500">
         No spending data available.
       </div>
     );
@@ -23,14 +23,14 @@ const CategoryCard = () => {
   const highestAmount = topSpendingCategories[0].value;
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
+    <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:border rounded-2xl shadow-md p-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
             Top Spending Categories
           </h2>
 
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             Highest expense categories
           </p>
         </div>
@@ -43,7 +43,7 @@ const CategoryCard = () => {
             <div key={item.name} className='flex justify-between items-center gap-3 py-[3px]'>
               <div className='flex-1'>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-semibold">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 dark:text-gray-800 text-black flex items-center justify-center font-semibold">
                     {idx + 1}
                   </div>
 
@@ -51,7 +51,7 @@ const CategoryCard = () => {
                     {medals[idx]}
                   </span>
 
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 dark:text-gray-100">
                     {item.name}
                   </span>
                 </div>
@@ -62,7 +62,7 @@ const CategoryCard = () => {
                   />
                 </div>
               </div>
-              <div className="flex justify-between mt-1 text-xs text-gray-500">
+              <div className="flex justify-between mt-1 text-xs text-gray-500 dark:text-gray-400">
                 <span className='pr-4'>{percentage.toFixed(0)}%</span>
 
                 <span className='font-bold lg:text-lg whitespace-nowrap'>

@@ -10,9 +10,12 @@ import {
     CartesianGrid,
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
+import ThemeContext from "../context/ThemeContext";
 
 const IncomeExpenseTrend = () => {
     const { monthlyIncomeExpenseData } = useContext(ExpenseContext);
+    const { theme } = useContext(ThemeContext);
+    const isDark = theme === "dark";
 
     const [range, setRange] = useState(6);
 
@@ -20,19 +23,44 @@ const IncomeExpenseTrend = () => {
         return monthlyIncomeExpenseData.slice(-range);
     }, [monthlyIncomeExpenseData, range]);
 
+    const colors = {
+        cardBg: isDark ? "#111827" : "#FFFFFF",
+        border: isDark ? "#1F2937" : "#E5E7EB",
+
+        title: isDark ? "#F9FAFB" : "#1F2937",
+        text: isDark ? "#D1D5DB" : "#6B7280",
+
+        grid: isDark ? "#374151" : "#E5E7EB",
+        axis: isDark ? "#9CA3AF" : "#64748B",
+
+        tooltipBg: isDark ? "#1F2937" : "#FFFFFF",
+        tooltipBorder: isDark ? "#374151" : "#E5E7EB",
+        tooltipText: isDark ? "#F9FAFB" : "#111827",
+
+        dotStroke: isDark ? "#111827" : "#FFFFFF",
+    };
+
+    if (!chartData.length) {
+        return (
+            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-md p-6 text-center text-gray-500 dark:text-gray-400">
+                No income and expense data available.
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-white w-full lg:w-1/2 rounded-2xl shadow-md mb-4 p-6">
+        <div className="w-full rounded-2xl shadow-md border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h2 className="text-lg font-semibold text-gray-800">
+                    <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                         Income vs Expense Trend
                     </h2>
 
                     <div className="flex gap-5 mt-3 text-sm">
                         <div className="flex items-center gap-2">
                             <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-                            <span className="text-gray-500">Income</span>
+                            <span className="text-gray-500 dark:text-gray-400">Income</span>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -45,7 +73,23 @@ const IncomeExpenseTrend = () => {
                 <select
                     value={range}
                     onChange={(e) => setRange(Number(e.target.value))}
-                    className="border rounded-lg px-3 py-2 text-sm outline-none cursor-pointer"
+                    className="
+border
+border-gray-300
+rounded-lg
+px-3
+py-2
+text-sm
+outline-none
+cursor-pointer
+
+bg-white
+text-gray-900
+
+dark:bg-gray-800
+dark:border-gray-700
+dark:text-gray-100
+"
                 >
                     <option value={1}>This Month</option>
                     <option value={3}>Last 3 Months</option>
@@ -79,12 +123,15 @@ const IncomeExpenseTrend = () => {
                     <CartesianGrid
                         strokeDasharray="3 3"
                         vertical={false}
-                        stroke="#f1f5f9"
+                        stroke={colors.grid}
                     />
 
                     <XAxis
                         dataKey="month"
-                        tick={{ fontSize: 12, fill: "#64748b" }}
+                        tick={{
+                            fontSize: 12,
+                            fill: colors.axis,
+                        }}
                         axisLine={false}
                         tickLine={false}
                     />
@@ -94,17 +141,21 @@ const IncomeExpenseTrend = () => {
                         tickFormatter={(value) =>
                             `₹${(value / 1000).toFixed(0)}k`
                         }
-                        tick={{ fontSize: 12, fill: "#64748b" }}
+                        tick={{
+                            fontSize: 12,
+                            fill: colors.axis,
+                        }}
                         axisLine={false}
                         tickLine={false}
                     />
 
                     <Tooltip
                         contentStyle={{
-                            background: "#fff",
+                            background: colors.tooltipBg,
                             borderRadius: "10px",
-                            border: "none",
-                            boxShadow: "0 4px 12px rgba(0,0,0,.1)",
+                            border: `1px solid ${colors.tooltipBorder}`,
+                            color: colors.tooltipText,
+                            boxShadow: "0 4px 12px rgba(0,0,0,.15)",
                         }}
                         formatter={(value) => `₹${value.toLocaleString("en-IN")}`}
                     />
@@ -133,10 +184,16 @@ const IncomeExpenseTrend = () => {
                         dot={{
                             r: 4,
                             fill: "#10B981",
-                            stroke: "#fff",
+                            stroke: colors.dotStroke,
                             strokeWidth: 2,
                         }}
-                        activeDot={{ r: 6 }}
+
+                        activeDot={{
+                            r: 6,
+                            fill: "#10B981",
+                            stroke: colors.dotStroke,
+                            strokeWidth: 2,
+                        }}
                     />
 
                     <Line
@@ -147,10 +204,16 @@ const IncomeExpenseTrend = () => {
                         dot={{
                             r: 4,
                             fill: "#EF4444",
-                            stroke: "#fff",
+                            stroke: colors.dotStroke,
                             strokeWidth: 2,
                         }}
-                        activeDot={{ r: 6 }}
+
+                        activeDot={{
+                            r: 6,
+                            fill: "#EF4444",
+                            stroke: colors.dotStroke,
+                            strokeWidth: 2,
+                        }}
                     />
                 </ComposedChart>
             </ResponsiveContainer>

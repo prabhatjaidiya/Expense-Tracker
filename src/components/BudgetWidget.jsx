@@ -30,7 +30,7 @@ const BudgetWidget = () => {
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border p-6 lg:m-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl shadow-sm border p-6 lg:m-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer">
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -89,10 +89,10 @@ const BudgetWidget = () => {
             ${percentage > 100
                             ? "bg-red-100 text-red-700"
                             : percentage >= 90
-                                ? "bg-red-100 text-red-600"
+                                ? "bg-red-100 text-red-600 dark:text-[#EF4444]"
                                 : percentage >= 70
-                                    ? "bg-yellow-100 text-yellow-700"
-                                    : "bg-green-100 text-green-700"
+                                    ? "bg-yellow-100 text-yellow-700 dark:text-[#FACC15]"
+                                    : "bg-green-100 text-green-700 dark:text-[#22C55E]"
                         }`}
                 >
                     {status}

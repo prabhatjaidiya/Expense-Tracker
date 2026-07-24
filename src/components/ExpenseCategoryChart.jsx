@@ -9,8 +9,9 @@ import {
 } from "recharts";
 import ExpenseContext from "../context/ExpenseContext";
 import { useMediaQuery } from "react-responsive";
+import ThemeContext from "../context/ThemeContext";
 
-const COLORS = [
+const CHART_COLORS = [
   "#3B82F6",
   "#22C55E",
   "#F59E0B",
@@ -22,9 +23,11 @@ const COLORS = [
   "#F97316",
 ];
 
-
-
 const ExpenseCategoryChart = () => {
+
+  const { theme } = useContext(ThemeContext);
+
+  const isDark = theme === "dark";
 
   const { pieData } = useContext(ExpenseContext);
 
@@ -36,18 +39,39 @@ const ExpenseCategoryChart = () => {
     return pieData.slice(-range);
   }, [pieData, range]);
 
+  const colors = {
+    tooltipBg: isDark ? "#1F2937" : "#FFFFFF",
+    tooltipBorder: isDark ? "#374151" : "#E5E7EB",
+    tooltipText: isDark ? "#F9FAFB" : "#111827",
+
+    legend: isDark ? "#D1D5DB" : "#374151",
+
+    pieStroke: isDark ? "#111827" : "#FFFFFF",
+
+    label: isDark ? "#F9FAFB" : "#374151",
+  };
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const { name, value } = payload[0].payload;
 
       return (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-4">
-          <p className="font-semibold text-gray-700 border-b pb-2 mb-2">
+        <div
+          className="rounded-xl shadow-lg p-4"
+          style={{
+            backgroundColor: colors.tooltipBg,
+            border: `1px solid ${colors.tooltipBorder}`,
+            color: colors.tooltipText,
+          }}
+        >
+          <p
+            className="border-b pb-2 mb-2 font-semibold"
+            style={{ color: colors.tooltipText }}
+          >
             {name}
           </p>
 
-          <p className="text-blue-600 font-bold">
+          <p className="text-blue-500 font-bold">
             ₹ {value.toLocaleString("en-IN")}
           </p>
         </div>
@@ -59,19 +83,19 @@ const ExpenseCategoryChart = () => {
 
   if (!pieData.length) {
     return (
-      <div className="bg-white rounded-2xl shadow-md p-6 text-center text-gray-500">
+      <div className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl shadow-md p-6 text-center text-gray-500">
         No expense data available.
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md px-2 py-6">
+    <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:border rounded-2xl shadow-md px-2 py-6">
 
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center mb-6">
 
         <div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
             Expense Categories
           </h2>
 
@@ -82,7 +106,7 @@ const ExpenseCategoryChart = () => {
         <select
           value={range}
           onChange={(e) => setRange(Number(e.target.value))}
-          className="border rounded-lg w-min px-3 py-2 text-sm outline-none cursor-pointer"
+          className="border text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-lg w-min px-3 py-2 text-sm outline-none cursor-pointer"
         >
           <option value={1}>This Month</option>
           <option value={3}>Last 3 Months</option>
@@ -105,16 +129,28 @@ const ExpenseCategoryChart = () => {
               outerRadius={isMobile ? 75 : 105}
               paddingAngle={3}
               cornerRadius={8}
-              label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+              label={({ percent, x, y }) => (
+                <text
+                  x={x}
+                  y={y}
+                  fill={colors.label}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={12}
+                  fontWeight={600}
+                >
+                  {(percent * 100).toFixed(0)}%
+                </text>
+              )}
               labelLine={false}
               activeOuterRadius={115}
               animationDuration={1000}
             >
-              {pieData.map((entry, index) => (
+              {chartData.map((entry, index) => (
                 <Cell
                   key={index}
-                  fill={COLORS[index % COLORS.length]}
-                  stroke="#fff"
+                  fill={CHART_COLORS[index % CHART_COLORS.length]}
+                  stroke={colors.pieStroke}
                   strokeWidth={2}
                 />
               ))}
@@ -128,7 +164,9 @@ const ExpenseCategoryChart = () => {
               wrapperStyle={{
                 paddingTop: 20,
                 fontSize: "14px",
-              }} />
+                color: colors.legend,
+              }}
+            />
 
           </PieChart>
 

@@ -26,6 +26,11 @@ const Hero = () => {
     return (((current - previous) / previous) * 100).toFixed(1);
   };
 
+  const transactionPercentage = calculatePercentage(
+    monthlySummary.currentTransactions,
+    monthlySummary.previousTransactions
+  );
+
   const balancePercentage = calculatePercentage(
     monthlySummary.currentBalance,
     monthlySummary.previousBalance
@@ -58,7 +63,7 @@ const Hero = () => {
           percentage={balancePercentage}
           isPositive={monthlySummary.currentBalance >= monthlySummary.previousBalance}
           icon={
-            <div className="flex h-6 w-6 lg:h-12 lg:w-12 items-center justify-center rounded-lg bg-blue-100">
+            <div className="flex h-6 w-6 lg:h-12 lg:w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30 transition-colors">
               <FaWallet className="text-md lg:text-2xl text-blue-600" />
             </div>
           }
@@ -70,7 +75,7 @@ const Hero = () => {
           percentage={incomePercentage}
           isPositive={monthlySummary.currentIncome >= monthlySummary.previousIncome}
           icon={
-            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-green-100">
+            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30 transition-colors">
               <MdOutlineAttachMoney className="text-md lg:text-2xl text-green-600" />
             </div>
           }
@@ -82,7 +87,7 @@ const Hero = () => {
           percentage={expensePercentage}
           isPositive={monthlySummary.currentExpense >= monthlySummary.previousExpense}
           icon={
-            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-red-100">
+            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30 transition-colors">
               <IoTrendingDown className="text-md lg:text-2xl text-red-600" />
             </div>
           }
@@ -91,10 +96,10 @@ const Hero = () => {
         <Statcard
           heading="Transactions"
           amount={totalTransaction}
-          percentage={transectionPercentage}
+          percentage={transactionPercentage}
           isPositive={monthlySummary.currentTransactions >= monthlySummary.previousTransactions}
           icon={
-            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-indigo-100">
+            <div className="flex h-6 w-6 lg:h-10 lg:w-10 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900/30 transition-colors">
               <HiOutlineReceiptRefund className="text-md lg:text-2xl text-indigo-600" />
             </div>
           }

@@ -9,24 +9,34 @@ import BudgetOverview from '../components/BudgetOverview'
 
 const Analytics = () => {
   return (
-    <div>
+    <div className="space-y-6">
       <Hero />
-      <div className='max-w-7xl lg:flex lg:gap-4 mx-auto sm:px-6 lg:px-4'>
-        <IncomeExpenseTrend />
-        <ExpenseCategoryChartAnalytics />
+
+      {/* Charts */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <IncomeExpenseTrend />
+          <ExpenseCategoryChartAnalytics />
+        </div>
       </div>
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-4 mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6 items-start">
+
+      {/* Savings & Categories */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SavingsTrendCard />
           <TopSpendingCategories />
         </div>
-        <div className="flex flex-wrap">
+      </div>
+
+      {/* Insights */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 pb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SpendingInsights />
           <BudgetOverview />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Analytics

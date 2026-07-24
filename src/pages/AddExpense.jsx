@@ -19,6 +19,28 @@ const AddExpense = () => {
     notes: "",
   });
 
+  const inputClass = `
+w-full
+rounded-lg
+border
+border-gray-300
+bg-white
+text-gray-900
+px-4
+py-3
+outline-none
+transition-all
+duration-200
+focus:border-blue-500
+focus:ring-2
+focus:ring-blue-500/20
+
+dark:bg-gray-800
+dark:border-gray-700
+dark:text-gray-100
+dark:placeholder:text-gray-500
+`;
+
   useEffect(() => {
     if (transaction) {
       setFormData({
@@ -108,8 +130,8 @@ const AddExpense = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white px-4">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl pb-8 pt-2 px-8">
+    <div className="min-h-screen px-4">
+      <div className="max-w-3xl mx-auto bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:border rounded-xl shadow-xl pb-8 pt-2 px-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
@@ -121,7 +143,7 @@ const AddExpense = () => {
               placeholder="Enter title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              className={inputClass}
             />
 
             {errors.title && (
@@ -139,7 +161,7 @@ const AddExpense = () => {
               placeholder="Enter amount"
               value={formData.amount}
               onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              className={inputClass}
             />
 
             {errors.amount && (
@@ -156,7 +178,7 @@ const AddExpense = () => {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 text-black border-gray-200 dark:bg-gray-800 dark:border-gray-800 dark:text-white focus:ring-blue-500 outline-none"
               >
                 <option value="">Select Category</option>
                 <option>Food</option>
@@ -186,7 +208,7 @@ const AddExpense = () => {
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 text-black border-gray-200 dark:bg-gray-800 dark:border-gray-800 dark:text-white focus:ring-blue-500 outline-none"
               >
                 <option>Expense</option>
                 <option>Income</option>
@@ -205,7 +227,7 @@ const AddExpense = () => {
                 name="paymentMethod"
                 value={formData.paymentMethod}
                 onChange={handleChange}
-                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border rounded-lg px-4 py-3 focus:ring-2 text-black border-gray-200 dark:bg-gray-800 dark:border-gray-800 dark:text-white focus:ring-blue-500 outline-none"
               >
                 <option value="">Select Method</option>
                 <option>Cash</option>
@@ -225,14 +247,14 @@ const AddExpense = () => {
 
             {/* Date */}
             <div>
-              <label className="block mb-2 font-medium">Date</label>
+              <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">Date</label>
 
               <input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                className={inputClass}
               />
 
               {errors.date && (
@@ -253,7 +275,8 @@ const AddExpense = () => {
               placeholder="Write something..."
               value={formData.notes}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+              className=" w-full rounded-lg border border-gray-300 bg-white text-gray-900 px-4 py-3 resize-none outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500
+"
             />
           </div>
 

@@ -1,17 +1,9 @@
-import React, { useState } from "react";
 import Hero from "../components/Hero";
 import TransactionPreview from "../components/TransactionPreview";
 import ReportSummary from "../components/ReportSummary";
 import ExportReportCard from "../components/ExportReportCard";
 
 const Reports = () => {
-    const [filter, setFilter] = useState("all");
-    const [sortBy, setSortBy] = useState("newest");
-    const [dateRange, setDateRange] = useState({
-        startDate: "",
-        endDate: "",
-    });
-    
     return (
         <div className="space-y-4">
             <Hero />

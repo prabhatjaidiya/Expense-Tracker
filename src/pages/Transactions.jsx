@@ -55,7 +55,7 @@ const RecentTransactions = () => {
   }, [transactions, searchTerm, filter, sortBy]);
 
   return (
-    <div className="bg-white rounded-2xl h-full pt-6 px-6">
+    <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl h-full pt-6 px-6">
       {/* Header */}
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
@@ -71,7 +71,7 @@ const RecentTransactions = () => {
 
             onChange={(e) => setFilter(e.target.value)}
 
-            className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 
           >
 
@@ -103,7 +103,7 @@ const RecentTransactions = () => {
 
             onChange={(e) => setSortBy(e.target.value)}
 
-            className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 
           >
 
@@ -119,7 +119,7 @@ const RecentTransactions = () => {
         </div>
       </div>
 
-      <div className="overflow-y-auto max-h-[500px] overflow-x-auto rounded-xl border border-gray-200 bg-white">
+      <div className="overflow-y-auto max-h-[500px] hide-scrollbar overflow-x-auto rounded-xl border border-gray-200 bg-white text-black dark:bg-gray-900 dark:border-gray-800 dark:text-white">
         {transactions.length === 0 ? (
           <NoTransaction />
         ) : filteredTransactions.length === 0 ? (

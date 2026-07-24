@@ -15,6 +15,7 @@ const ForgotPassword = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -66,13 +67,13 @@ const ForgotPassword = () => {
     <AuthLayout>
       <AuthCard
         title="Forgot Password"
-        subtitle="Enter your email to receive a reset link."
+        subtitle="Enter your email to reset password."
       >
         {emailVerified ? (
           <form onSubmit={handleResetPassword} className="space-y-5">
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
+              <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 New Password
               </label>
 
@@ -83,14 +84,14 @@ const ForgotPassword = () => {
 
               {newPassword && (
                 <div className="mt-2">
-                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ${passwordStrength.color}`}
                       style={{ width: passwordStrength.width }}
                     />
                   </div>
 
-                  <p className="text-sm mt-1 text-gray-500">
+                  <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
                     Password Strength:
                     <span className="font-semibold ml-1">
                       {passwordStrength.label}
@@ -101,7 +102,7 @@ const ForgotPassword = () => {
             </div>
 
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
+              <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Confirm Password
               </label>
 
@@ -114,7 +115,7 @@ const ForgotPassword = () => {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition duration-200"
             >
               Reset Password
             </button>
@@ -123,7 +124,7 @@ const ForgotPassword = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">
+              <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email
               </label>
 
@@ -132,22 +133,30 @@ const ForgotPassword = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                className=" w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:focus:border-indigo-500 transition-colors duration-200"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-semibold transition"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2"
             >
-              Send Reset Link
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Verifying...
+                </>
+              ) : (
+                "Verify Email"
+              )}
             </button>
 
-            <p className="text-center text-gray-500">
+            <p className="text-center text-gray-500 dark:text-gray-400">
               Remember your password?{" "}
               <Link
                 to="/login"
-                className="text-indigo-600 font-medium"
+                className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline"
               >
                 Login
               </Link>

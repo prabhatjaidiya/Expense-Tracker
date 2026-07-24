@@ -71,7 +71,7 @@ const Login = () => {
 
           {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
 
@@ -80,7 +80,7 @@ const Login = () => {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+              className=" w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">
@@ -91,7 +91,7 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
 
@@ -109,14 +109,17 @@ const Login = () => {
           {/* Remember Me + Forgot */}
           <div className="flex items-center justify-between text-sm">
 
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" />
+            <label className="flex items-center gap-2 cursor-pointer text-gray-700 dark:text-gray-300">
+              <input
+                type="checkbox"
+                className="accent-indigo-600"
+              />
               Remember me
             </label>
 
             <Link
               to="/forgot-password"
-              className="text-indigo-600 hover:text-indigo-700"
+              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
             >
               Forgot Password?
             </Link>
@@ -140,11 +143,11 @@ const Login = () => {
           </button>
 
           {/* Register Link */}
-          <p className="text-center text-gray-500">
+          <p className="text-center text-gray-500 dark:text-gray-400">
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="text-indigo-600 font-medium"
+              className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
             >
               Register
             </Link>

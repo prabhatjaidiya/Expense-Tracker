@@ -17,6 +17,7 @@ import exportCSV from "../utils/exportCSV";
 import exportPDF from "../utils/exportPDF";
 import ExportDropdown from "./ExportDropdown";
 import AuthContext from "../context/AuthContext";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 
 const Navbar = () => {
@@ -97,16 +98,16 @@ const Navbar = () => {
         : pageTitlesMobile[location.pathname] || "Expense Tracker";
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm border-b px-6 py-4">
+    <nav className="sticky top-0 z-50 bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white shadow-sm border-b px-6 py-4">
       <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
 
         <div className="flex justify-between items-center w-full">
 
           {/* Left */}
           <div className="flex items-center gap-3">
-            <NavLink to="/">
+            <NavLink to="/" className="flex items-center gap-3">
               {/* Logo */}
-              <img src={logo} className="h-12 w-12 rounded-xl" />
+              <img src={logo} className="h-10 w-10 rounded-xl" />
 
               {/* Logo text (desktop only) */}
               <h2 className="hidden lg:block font-semibold">
@@ -124,7 +125,7 @@ const Navbar = () => {
                 <h3 className="text-2xl font-bold">
                   {currentPage.title}
                 </h3>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-gray-400">
                   {currentPage.subtitle}
                 </p>
               </div>
@@ -150,7 +151,7 @@ const Navbar = () => {
                   }}
                   dateFormat="dd MMM yyyy"
                   customInput={
-                    <button className="flex items-center gap-2 border bg-white px-4 py-2 rounded-xl shadow-sm hover:bg-gray-50 transition">
+                    <button className="flex items-center gap-2 border bg-white border-gray-200 text-black dark:border-gray-800 dark:bg-gray-800 dark:text-white px-4 py-2 rounded-xl shadow-sm hover:bg-gray-50 transition">
                       <CalendarDays size={18} />
 
                       <span className="hidden md:block">
@@ -177,6 +178,7 @@ const Navbar = () => {
                 />
                 {/* Export */}
                 <ExportDropdown />
+                <ThemeSwitcher />
               </>
             ) : (
               <>
@@ -194,7 +196,7 @@ const Navbar = () => {
                   }}
                   dateFormat="dd MMM yyyy"
                   customInput={
-                    <button className="flex items-center gap-2 border bg-white px-4 py-2 rounded-xl shadow-sm hover:bg-gray-50 transition">
+                    <button className="flex items-center gap-2 border bg-white border-gray-200 text-black dark:border-gray-800 dark:bg-gray-800 dark:text-white px-4 py-2 rounded-xl shadow-sm hover:bg-gray-50 transition">
                       <CalendarDays size={18} />
 
                       <span className="hidden md:block">
@@ -220,6 +222,7 @@ const Navbar = () => {
                   }
                 />
                 { isReportPage && <ExportDropdown />}
+                <ThemeSwitcher />
               </>
             )}
 

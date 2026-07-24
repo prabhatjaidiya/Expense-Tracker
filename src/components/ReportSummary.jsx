@@ -5,9 +5,10 @@ import ExpenseContext from "../context/ExpenseContext";
 const ReportSummary = () => {
     const { totalIncome, totalExpense, totalBalance, totalTransaction } = useContext(ExpenseContext)
     const total = totalBalance + totalExpense + totalIncome;
-    const BalancePercent = (totalBalance / total) * 100;
-    const IncomePercent = (totalIncome / total) * 100;
-    const ExpensePercent = (totalExpense / total) * 100;
+
+    const IncomePercent = total ? (totalIncome / total) * 100 : 0;
+    const ExpensePercent = total ? (totalExpense / total) * 100 : 0;
+    const BalancePercent = total ? (totalBalance / total) * 100 : 0;
 
 
     const data = [
@@ -17,8 +18,8 @@ const ReportSummary = () => {
     ];
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 w-full max-w-md">
-            <h2 className="text-lg font-semibold text-gray-800 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 w-full max-w-md transition-colors">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-5">
                 Report Summary
             </h2>
 
@@ -43,8 +44,8 @@ const ReportSummary = () => {
 
                     {/* Center Text */}
                     <div className="absolute text-center">
-                        <h2 className="text-3xl font-bold text-gray-800">{totalTransaction}</h2>
-                        <p className="text-xs text-gray-500">Transactions</p>
+                        <h2 className="text-3xl font-bold text-gray-800 dark:text-white">{totalTransaction}</h2>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Transactions</p>
                     </div>
                 </div>
 
@@ -53,42 +54,42 @@ const ReportSummary = () => {
                     <div>
                         <div className="flex items-center gap-2">
                             <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Income
                             </span>
                         </div>
 
-                        <p className="ml-5 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                        <p className="ml-5 text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                             ₹ {totalIncome.toLocaleString("en-IN")}
-                            <span className="ml-1 text-gray-500 font-normal">({IncomePercent}%)</span>
+                            <span className="ml-1 text-gray-500 dark:text-gray-400 font-normal">({IncomePercent.toFixed(2)}%)</span>
                         </p>
                     </div>
 
                     <div>
                         <div className="flex items-center gap-2">
                             <span className="w-3 h-3 rounded-full bg-red-400"></span>
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Expense
                             </span>
                         </div>
 
-                        <p className="ml-5 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                        <p className="ml-5 text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                             ₹ {totalExpense.toLocaleString("en-IN")}
-                            <span className="text-gray-500 font-normal ml-1">({ExpensePercent.toFixed(2)}%)</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({ExpensePercent.toFixed(2)}%)</span>
                         </p>
                     </div>
 
                     <div>
                         <div className="flex items-center gap-2">
                             <span className="w-3 h-3 rounded-full bg-blue-500"></span>
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Balance
                             </span>
                         </div>
 
-                        <p className="ml-5 text-sm font-semibold text-gray-900 whitespace-nowrap">
+                        <p className="ml-5 text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                             ₹ {totalBalance.toLocaleString("en-IN")}
-                            <span className="text-gray-500 font-normal ml-1">({BalancePercent.toFixed(2)}%)</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({BalancePercent.toFixed(2)}%)</span>
                         </p>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import AuthContext from "../context/AuthContext";
 const MobileNavbar = () => {
   const { currentUser } = useContext(AuthContext)
   return (
-    <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white border-t shadow-lg z-50">
+    <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white text-black dark:bg-gray-900 dark:text-white border-t shadow-lg z-50">
       <div className="flex justify-around items-center h-16">
 
         <NavLink

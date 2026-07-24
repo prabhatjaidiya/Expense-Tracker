@@ -75,17 +75,33 @@ const ExpenseCategoryChart = () => {
     );
 
     return (
-        <div className="bg-white w-full lg:w-1/2 rounded-2xl shadow-md border border-gray-200 p-6">
+        <div className="w-full rounded-2xl shadow-md border border-gray-200 bg-white text-gray-900 p-6 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-100">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="font-semibold text-gray-800">
+            <div className="flex items-center justify-between mb-6 font-semibold text-gray-800 dark:text-gray-200">
+                <h2 className="font-semibold">
                     Expense by Category
                 </h2>
 
                 <select
                     value={range}
                     onChange={(e) => setRange(Number(e.target.value))}
-                    className="border rounded-lg px-3 py-2 text-sm outline-none cursor-pointer"
+                    className="
+border
+border-gray-300
+bg-white
+text-gray-900
+rounded-lg
+px-3
+py-2
+text-sm
+outline-none
+cursor-pointer
+transition-colors
+
+dark:bg-gray-800
+dark:border-gray-700
+dark:text-gray-100
+"
                 >
                     <option value={1}>This Month</option>
                     <option value={1}>This Month</option>
@@ -107,7 +123,8 @@ const ExpenseCategoryChart = () => {
                                 outerRadius={105}
                                 paddingAngle={2}
                                 cornerRadius={6}
-                                stroke="#fff"
+                                stroke="currentColor"
+                                className="text-white dark:text-gray-900"
                                 strokeWidth={2}
                             >
                                 {chartData.map((_, index) => (
@@ -122,11 +139,11 @@ const ExpenseCategoryChart = () => {
 
                     {/* Center */}
                     <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                             Total Expense
                         </p>
 
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                             ₹{totalExpense.toLocaleString("en-IN")}
                         </h2>
                     </div>
@@ -147,17 +164,17 @@ const ExpenseCategoryChart = () => {
                                     }}
                                 />
 
-                                <span className="text-sm text-gray-700">
+                                <span className="text-sm text-gray-700 dark:text-gray-300">
                                     {item.name}
                                 </span>
                             </div>
 
                             <div className="flex items-center gap-5">
-                                <span className="font-medium text-gray-800">
+                                <span className="font-medium text-gray-800 dark:text-gray-100">
                                     ₹{item.value.toLocaleString("en-IN")}
                                 </span>
 
-                                <span className="w-12 text-right text-sm text-gray-500">
+                                <span className="w-12 text-right text-sm text-gray-500 dark:text-gray-400">
                                     {item.percentage}
                                 </span>
                             </div>

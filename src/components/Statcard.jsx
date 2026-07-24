@@ -11,13 +11,13 @@ const StatCard = ({
   compareText = "vs last period",
 }) => {
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <div className="bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white rounded-2xl p-5 shadow-sm border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <div className="flex items-center justify-between">
         {/* Left Side */}
         <div>
           <h3 className="text-sm text-gray-500 font-medium">{heading}</h3>
 
-          <h2 className="lg:text-2xl font-semibold lg:font-bold text-gray-900 mt-1">
+          <h2 className="lg:text-2xl font-semibold lg:font-bold text-gray-900 dark:text-gray-100 mt-1">
             {amount}
           </h2>
 
