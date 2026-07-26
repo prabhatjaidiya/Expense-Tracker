@@ -12,6 +12,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import AuthContext from "./AuthContext";
+import NotificationContext from "./NotificationContext";
 
 const MONTHS = Array.from({ length: 12 }, (_, index) => {
   const date = new Date();
@@ -36,6 +37,9 @@ const ExpenseProvider = ({ children }) => {
 
   const { currentUser } = useContext(AuthContext);
 
+  const [budgetWarningSent, setBudgetWarningSent] = useState(false);
+  const [budgetExceededSent, setBudgetExceededSent] = useState(false);
+
   const [allTransactions, setAllTransactions] = useState(() => {
     const storedTransactions = localStorage.getItem("transactions");
 
@@ -49,6 +53,8 @@ const ExpenseProvider = ({ children }) => {
       (transaction) => transaction.userId === currentUser.id
     );
   }, [allTransactions, currentUser]);
+
+  const { addNotification, notifications } = useContext(NotificationContext);
 
   const [dateRange, setDateRange] = useState({
     startDate: new Date(new Date().getFullYear(), 0, 1),
@@ -86,23 +92,87 @@ const ExpenseProvider = ({ children }) => {
       },
       ...prev,
     ]);
+
+    addNotification({
+      title:
+        transaction.type === "income"
+          ? "Income Added"
+          : "Expense Added",
+
+      message: `₹${Number(transaction.amount).toLocaleString(
+        "en-IN"
+      )} added for ${transaction.category}.`,
+
+      type: transaction.type,
+    });
+    if (
+      transaction.type === "expense" &&
+      Number(transaction.amount) >= 10000
+    ) {
+      addNotification({
+        title: "Large Expense",
+        message: `₹${Number(transaction.amount).toLocaleString(
+          "en-IN"
+        )} spent on ${transaction.category}.`,
+        type: "expense",
+      });
+    }
+    if (
+      transaction.type === "income" &&
+      Number(transaction.amount) >= 50000
+    ) {
+      addNotification({
+        title: "Large Income",
+        message: `₹${Number(transaction.amount).toLocaleString(
+          "en-IN"
+        )} received from ${transaction.category}.`,
+        type: "income",
+      });
+    }
   }, [currentUser]);
 
   const deleteTransaction = useCallback((id) => {
+    const transaction = transactions.find(
+      (transaction) => transaction.id === id
+    );
     setAllTransactions((prev) =>
       prev.filter((item) => item.id !== id)
     );
+    if (transaction) {
+      addNotification({
+        title:
+          transaction.type === "income"
+            ? "Income Deleted"
+            : "Expense Deleted",
+
+        message: `₹${Number(transaction.amount).toLocaleString(
+          "en-IN"
+        )} removed from ${transaction.category}.`,
+
+        type: transaction.type,
+      });
+    }
   }, []);
 
   const updateTransaction = useCallback((id, updatedTransaction) => {
     setAllTransactions((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, ...updatedTransaction }
-          : item
-      )
+      prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, ...updatedTransaction };
+        }
+        return item;
+      })
     );
-  }, []);
+
+    addNotification({
+      title:
+        updatedTransaction.type === "income"
+          ? "Income Updated"
+          : "Expense Updated",
+      message: `${updatedTransaction.category} updated successfully.`,
+      type: updatedTransaction.type,
+    });
+  }, [addNotification]);
 
   const totalIncome = useMemo(() => {
     return filteredTransactions
@@ -278,6 +348,12 @@ const ExpenseProvider = ({ children }) => {
       userId: currentUser.id,
     }));
 
+    addNotification({
+      title: "Demo Data Loaded",
+      message: "Sample transactions have been added.",
+      type: "report",
+    });
+
     setAllTransactions((prev) => [
       ...demoTransactions,
       ...prev,
@@ -300,6 +376,11 @@ const ExpenseProvider = ({ children }) => {
         (item) => item.userId !== currentUser.id
       )
     );
+    addNotification({
+      title: "Data Cleared",
+      message: "All transactions were removed successfully.",
+      type: "warning",
+    });
   };
 
   const [allMonthlyBudgets, setAllMonthlyBudgets] = useState(() => {
@@ -362,6 +443,12 @@ const ExpenseProvider = ({ children }) => {
         const otherUsers = prev.filter(
           (item) => item.userId !== currentUser.id
         );
+
+        addNotification({
+          title: "Budget Updated",
+          message: `Monthly budget set to ₹${Number(amount).toLocaleString("en-IN")}.`,
+          type: "budget",
+        });
 
         return [
           ...otherUsers,
@@ -505,7 +592,7 @@ const ExpenseProvider = ({ children }) => {
     });
   }, [categoryBudgets, currentMonthCategorySpent]);
 
-  const budgetStatus = useMemo(() => {
+  const budgetDisplayStatus = useMemo(() => {
     const percentage =
       budgetSummary.percentage;
 
@@ -724,6 +811,59 @@ const ExpenseProvider = ({ children }) => {
       savingsGrowth: Math.round(savingsGrowth),
     };
   }, [transactions]);
+
+  const [budgetStatus, setBudgetStatus] = useState(() => {
+    return localStorage.getItem("budgetStatus") || "normal";
+  });
+
+  useEffect(() => {
+    if (monthlyBudget <= 0) return;
+
+    if (
+      budgetSummary.percentage >= 100 &&
+      budgetStatus !== "exceeded"
+    ) {
+      addNotification({
+        title: "Budget Exceeded",
+        message: `You've exceeded your monthly budget by ₹${budgetSummary.exceededBy.toLocaleString(
+          "en-IN"
+        )}.`,
+        type: "error",
+      });
+
+      setBudgetStatus("exceeded");
+      localStorage.setItem("budgetStatus", "exceeded");
+    }
+
+    else if (
+      budgetSummary.percentage >= 80 &&
+      budgetSummary.percentage < 100 &&
+      budgetStatus !== "warning"
+    ) {
+      addNotification({
+        title: "Budget Warning",
+        message: `You've used ${Math.round(
+          budgetSummary.percentage
+        )}% of your monthly budget.`,
+        type: "warning",
+      });
+
+      setBudgetStatus("warning");
+      localStorage.setItem("budgetStatus", "warning");
+    }
+
+    else if (budgetSummary.percentage < 80 && budgetStatus !== "normal") {
+      setBudgetStatus("normal");
+      localStorage.setItem("budgetStatus", "normal");
+    }
+
+  }, [
+    monthlyBudget,
+    budgetSummary.percentage,
+    budgetSummary.exceededBy,
+    budgetStatus,
+    addNotification,
+  ]);
 
   return (
     <ExpenseContext.Provider

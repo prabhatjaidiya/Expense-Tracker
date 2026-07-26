@@ -1,11 +1,15 @@
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
+import { useContext } from "react";
+import NotificationContext from "../context/NotificationContext";
 
 const exportCSV = (transactions) => {
   if (!transactions.length) {
     alert("No transactions available to export.");
     return;
   }
+
+  const { addNotification } = useContext(NotificationContext);
 
   const csvData = transactions.map((item) => ({
     Title: item.title,
@@ -29,6 +33,12 @@ const exportCSV = (transactions) => {
     }.csv`;
 
   saveAs(blob, fileName);
+
+  addNotification({
+    title: "CSV Exported",
+    message: "Transactions exported successfully.",
+    type: "report",
+  });
 
 };
 

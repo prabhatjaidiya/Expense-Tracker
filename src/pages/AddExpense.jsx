@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import ExpenseContext from "../context/ExpenseContext";
+import PageWrapper from "../components/PageWrapper";
 
 const AddExpense = () => {
   const { id } = useParams();
@@ -130,6 +131,7 @@ dark:placeholder:text-gray-500
   };
 
   return (
+    <PageWrapper>
     <div className="min-h-screen px-4">
       <div className="max-w-3xl mx-auto bg-white text-black border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:text-white dark:border rounded-xl shadow-xl pb-8 pt-2 px-8">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -275,8 +277,7 @@ dark:placeholder:text-gray-500
               placeholder="Write something..."
               value={formData.notes}
               onChange={handleChange}
-              className=" w-full rounded-lg border border-gray-300 bg-white text-gray-900 px-4 py-3 resize-none outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500
-"
+              className=" w-full rounded-lg border border-gray-300 bg-white text-gray-900 px-4 py-3 resize-none outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500"
             />
           </div>
 
@@ -289,6 +290,7 @@ dark:placeholder:text-gray-500
         </form>
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

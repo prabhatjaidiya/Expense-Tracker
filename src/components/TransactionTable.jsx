@@ -9,10 +9,12 @@ import {
     GraduationCap,
     Heart,
 } from "lucide-react";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import ExpenseContext from '../context/ExpenseContext';
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import ConfirmModal from "./ConfirmModal";
 
 const categoryColors = {
     Food:
@@ -79,138 +81,175 @@ const getCategoryIcon = (category) => {
 const TransactionTable = ({ transactions }) => {
     const navigate = useNavigate();
     const { deleteTransaction } = useContext(ExpenseContext)
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-    const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this transaction?")) {
-            deleteTransaction(id);
-        }
+    const handleDelete = (transaction) => {
+        setSelectedTransaction(transaction);
+        setShowDeleteModal(true);
     };
 
+    const confirmDelete = () => {
+        deleteTransaction(selectedTransaction.id);
+
+        setShowDeleteModal(false);
+        setSelectedTransaction(null);
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 8 },
+        visible: (index) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: index * 0.04,
+                duration: 0.25,
+            },
+        }),
+    };
+
+
     return (
-        <table className="w-full">
+        <>
+            <table className="w-full">
 
-            <thead className="sticky top-0 z-10 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
+                <thead className="sticky top-0 z-10 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
 
-                <tr className="text-sm text-gray-500 dark:text-gray-400">
+                    <tr className="text-sm text-gray-500 dark:text-gray-400">
 
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Title</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Category</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Amount</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Date</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Method</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Type</th>
-                    <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                {transactions.map((item) => (
-
-                    <tr
-                        key={item.id}
-                        className="border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors duration-200"
-                    >
-
-                        {/* Title */}
-
-                        <td className="py-4 px-4 font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
-                            {item.title}
-                        </td>
-
-                        {/* Category */}
-
-                        <td className='py-4 px-4'>
-
-                            <div className="flex items-center gap-3">
-
-                                {getCategoryIcon(item.category)}
-
-                                <span className={`px-3 py-1 rounded-full text-sm ${categoryColors[item.category] || "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                                    }`}>
-                                    {item.category}
-                                </span>
-
-                            </div>
-
-                        </td>
-
-                        {/* Amount */}
-
-                        <td
-                            className={`font-bold py-4 px-4 whitespace-nowrap ${item.type === "income"
-                                ? "text-green-600"
-                                : "text-red-500"
-                                }`}
-                        >
-                            {item.type === "income" ? "+" : "-"}
-                            ₹{Number(item.amount).toLocaleString("en-IN")}
-                        </td>
-
-                        {/* Date */}
-
-                        <td className="py-4 px-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
-                            {new Date(item.date).toLocaleDateString("en-IN", {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                            })}
-                        </td>
-
-                        {/* Payment */}
-
-                        <td className='py-4 px-4 whitespace-nowrap'>
-
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm dark:bg-blue-900/30 dark:text-blue-300">
-
-                                {item.paymentMethod}
-
-                            </span>
-
-                        </td>
-
-                        {/* Type */}
-
-                        <td className='py-4 px-4'>
-                            <span
-                                className={`px-3 py-1 rounded-full text-sm font-medium ${item.type === "income"
-                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                                    : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
-                                    }`}
-                            >
-                                {item.type}
-                            </span>
-                        </td>
-
-                        {/* Action */}
-
-                        <td className='py-4 px-4'>
-                            <div className="flex items-center gap-3">
-                                <button
-                                    className="text-blue-600 hover:text-blue-800 cursor-pointer dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-                                    onClick={() => navigate(`/add-expense/${item.id}`)}
-                                >
-                                    <FiEdit2 size={18} />
-                                </button>
-
-                                <button
-                                    className="text-red-600 hover:text-red-800 cursor-pointer transition-colors dark:text-red-400 dark:hover:text-red-300"
-                                    onClick={() => handleDelete(item.id)}
-                                >
-                                    <FiTrash2 size={18} />
-                                </button>
-                            </div>
-                        </td>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Title</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Category</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Amount</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Date</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Method</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Type</th>
+                        <th className="pb-4 px-4 text-left font-semibold text-gray-600 dark:text-gray-300">Actions</th>
 
                     </tr>
 
-                ))}
+                </thead>
 
-            </tbody>
+                <tbody>
 
-        </table>
+                    {transactions.map((item, index) => (
+
+                        <motion.tr
+                            key={item.id}
+                            custom={index}
+                            variants={rowVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="border-b border-gray-200 dark:border-gray-800 last:border-b-0 hover:bg-slate-50 dark:hover:bg-gray-800 transition-all hover:-translate-y-0.5 hover:shadow-md duration-200"
+                        >
+
+                            {/* Title */}
+
+                            <td className="py-4 px-4 font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                {item.title}
+                            </td>
+
+                            {/* Category */}
+
+                            <td className='py-4 px-4'>
+
+                                <div className="flex items-center gap-3">
+
+                                    {getCategoryIcon(item.category)}
+
+                                    <span className={`px-3 py-1 rounded-full text-sm ${categoryColors[item.category] || "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                                        }`}>
+                                        {item.category}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            {/* Amount */}
+
+                            <td
+                                className={`font-bold py-4 px-4 whitespace-nowrap ${item.type === "income"
+                                    ? "text-green-600"
+                                    : "text-red-500"
+                                    }`}
+                            >
+                                {item.type === "income" ? "+" : "-"}
+                                ₹{Number(item.amount).toLocaleString("en-IN")}
+                            </td>
+
+                            {/* Date */}
+
+                            <td className="py-4 px-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                {new Date(item.date).toLocaleDateString("en-IN", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                })}
+                            </td>
+
+                            {/* Payment */}
+
+                            <td className='py-4 px-4 whitespace-nowrap'>
+
+                                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm dark:bg-blue-900/30 dark:text-blue-300">
+
+                                    {item.paymentMethod}
+
+                                </span>
+
+                            </td>
+
+                            {/* Type */}
+
+                            <td className='py-4 px-4'>
+                                <span
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${item.type === "income"
+                                        ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                                        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                                        }`}
+                                >
+                                    {item.type}
+                                </span>
+                            </td>
+
+                            {/* Action */}
+
+                            <td className='py-4 px-4'>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        className="text-blue-600 hover:text-blue-800 cursor-pointer dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                                        onClick={() => navigate(`/add-expense/${item.id}`)}
+                                    >
+                                        <FiEdit2 size={18} />
+                                    </button>
+
+                                    <button
+                                        className="text-red-600 hover:text-red-800 cursor-pointer transition-colors dark:text-red-400 dark:hover:text-red-300"
+                                        onClick={() => handleDelete(item)}
+                                    >
+                                        <FiTrash2 size={18} />
+                                    </button>
+                                </div>
+                            </td>
+
+                        </motion.tr>
+
+                    ))}
+
+                </tbody>
+
+            </table>
+            <ConfirmModal
+                isOpen={showDeleteModal}
+                onClose={() => {
+                    setShowDeleteModal(false);
+                    setSelectedTransaction(null);
+                }}
+                onConfirm={confirmDelete}
+                title="Delete Transaction?"
+                message={`Are you sure you want to delete "${selectedTransaction?.title}"?`}
+            />
+        </>
     )
 }
 

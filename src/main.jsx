@@ -9,24 +9,27 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeProvider from "./context/ThemeProvider";
 import AuthProvider from "./context/AuthProvider";
+import { NotificationProvider } from "./context/NotificationContext";
 
 createRoot(document.getElementById('root')).render(
     <ThemeProvider>
         <BrowserRouter>
-            <AuthProvider>
-                <ExpenseProvider>
-                    <App />
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={2500}
-                        hideProgressBar={false}
-                        newestOnTop
-                        closeOnClick
-                        pauseOnHover
-                        theme="light"
-                    />
-                </ExpenseProvider>
-            </AuthProvider>
+            <NotificationProvider>
+                <AuthProvider>
+                    <ExpenseProvider>
+                        <App />
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={2500}
+                            hideProgressBar={false}
+                            newestOnTop
+                            closeOnClick
+                            pauseOnHover
+                            theme="light"
+                        />
+                    </ExpenseProvider>
+                </AuthProvider>
+            </NotificationProvider>
         </BrowserRouter>
     </ThemeProvider>
 )

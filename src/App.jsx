@@ -29,7 +29,7 @@ const App = () => {
   const isAuthPage = authRoutes.includes(location.pathname);
 
   return (
-    <div className="bg-gray-100 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+    <div className="bg-gray-100 text-gray-900 lg:h-screen dark:bg-gray-950 dark:text-gray-100">
       {!isAuthPage && <Navbar />}
 
       <div className="flex">
@@ -43,7 +43,7 @@ const App = () => {
           className={
             isAuthPage
               ? "w-full min-h-screen"
-              : "flex-1 mx-3 mb-3 p-4 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow overflow-y-auto hide-scrollbar h-[628px]"
+              : "flex-1 mx-3 mb-3 p-4 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 rounded-xl shadow overflow-y-auto hide-scrollbar lg:h-[calc(100vh-14vh)]"
           }
         >
           <Routes>

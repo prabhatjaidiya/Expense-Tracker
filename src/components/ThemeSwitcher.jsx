@@ -8,7 +8,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative flex h-8 w-16 items-center rounded-full transition-all duration-300 ${theme === "dark"
+      className={`relative hidden lg:flex h-8 w-16 items-center rounded-full transition-all duration-300 ${theme === "dark"
           ? "bg-indigo-600"
           : "bg-gray-300"
         }`}

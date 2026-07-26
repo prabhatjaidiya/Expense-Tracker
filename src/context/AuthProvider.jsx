@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
+import NotificationContext from "../context/NotificationContext";
 
 const AuthProvider = ({ children }) => {
+    const { addNotification } = useContext(NotificationContext);
     const [currentUser, setCurrentUser] = useState(
         JSON.parse(localStorage.getItem("currentUser"))
     );
@@ -31,6 +33,12 @@ const AuthProvider = ({ children }) => {
 
         setCurrentUser(matchedUser);
         setIsLoggedIn(true);
+
+        addNotification({
+            title: "Welcome Back",
+            message: `Welcome back, ${matchedUser.fullName}!`,
+            type: "info",
+        });
 
         return {
             success: true,
@@ -71,6 +79,12 @@ const AuthProvider = ({ children }) => {
 
         localStorage.setItem("users", JSON.stringify(users));
 
+        addNotification({
+            title: "Account Created",
+            message: "Your account has been created successfully.",
+            type: "profile",
+        });
+
         return {
             success: true,
             user: newUser,
@@ -107,8 +121,13 @@ const AuthProvider = ({ children }) => {
                     password: newPassword,
                 };
             }
-
             return user;
+        });
+
+        addNotification({
+            title: "Password Changed",
+            message: "Your account password was changed successfully.",
+            type: "security",
         });
 
         localStorage.setItem("users", JSON.stringify(updatedUsers));
@@ -142,6 +161,11 @@ const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem("currentUser");
         localStorage.removeItem("isLoggedIn");
+        addNotification({
+            title: "Logged Out",
+            message: "You have logged out successfully.",
+            type: "info",
+        });
 
         setCurrentUser(null);
         setIsLoggedIn(false);
@@ -169,6 +193,12 @@ const AuthProvider = ({ children }) => {
         );
 
         setCurrentUser(updatedCurrentUser);
+
+        addNotification({
+            title: "Profile Updated",
+            message: "Your profile information was updated successfully.",
+            type: "profile",
+        });
     };
 
     const deleteAccount = () => {
@@ -179,6 +209,12 @@ const AuthProvider = ({ children }) => {
         );
 
         localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+        addNotification({
+            title: "Account Deleted",
+            message: "Your account has been deleted.",
+            type: "delete",
+        });
 
         localStorage.removeItem("currentUser");
         localStorage.removeItem("isLoggedIn");
@@ -194,7 +230,6 @@ const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                currentUser,
                 isLoggedIn,
 
                 login,

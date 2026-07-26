@@ -1,6 +1,8 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../assets/logo.png";
+import { useContext } from "react";
+import NotificationContext from "../context/NotificationContext";
 
 const exportPDF = ({
   transactions,
@@ -9,6 +11,7 @@ const exportPDF = ({
   totalBalance,
   dateRange,
 }) => {
+  const { addNotification } = useContext(NotificationContext);
   const doc = new jsPDF();
 
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -46,10 +49,9 @@ const exportPDF = ({
   doc.text(
     `Date Range : ${dateRange.startDate.toLocaleDateString(
       "en-IN"
-    )} - ${
-      dateRange.endDate
-        ? dateRange.endDate.toLocaleDateString("en-IN")
-        : "Present"
+    )} - ${dateRange.endDate
+      ? dateRange.endDate.toLocaleDateString("en-IN")
+      : "Present"
     }`,
     14,
     40
@@ -229,6 +231,12 @@ const exportPDF = ({
   }
 
   doc.save("Expense_Report.pdf");
+
+  addNotification({
+    title: "PDF Report Exported",
+    message: "Expense report exported successfully.",
+    type: "report",
+  });
 };
 
 export default exportPDF;

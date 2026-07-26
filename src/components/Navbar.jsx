@@ -1,7 +1,7 @@
 import { GrAdd } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 import { CiDark } from "react-icons/ci";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import ExpenseContext from "../context/ExpenseContext";
 import logo from "../assets/logo.png";
 import { Link, Links, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -18,6 +18,8 @@ import exportPDF from "../utils/exportPDF";
 import ExportDropdown from "./ExportDropdown";
 import AuthContext from "../context/AuthContext";
 import ThemeSwitcher from "./ThemeSwitcher";
+import NotificationBell from "./NotificationBell";
+import NotificationDropdown from "./NotificationDropdown";
 
 
 const Navbar = () => {
@@ -30,12 +32,31 @@ const Navbar = () => {
     filteredTransactions,
     totalIncome,
     totalExpense,
-    totalBalance } =
-    useContext(ExpenseContext);
-
-
+    totalBalance } = useContext(ExpenseContext);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
 
   const pageTitlesDesktop = {
     "/": {
@@ -178,6 +199,17 @@ const Navbar = () => {
                 />
                 {/* Export */}
                 <ExportDropdown />
+                <div className="relative" ref={dropdownRef}>
+                  <NotificationBell
+                    onClick={() =>
+                      setShowNotifications((prev) => !prev)
+                    }
+                  />
+
+                  <NotificationDropdown
+                    isOpen={showNotifications}
+                  />
+                </div>
                 <ThemeSwitcher />
               </>
             ) : (
@@ -221,7 +253,18 @@ const Navbar = () => {
                     </button>
                   }
                 />
-                { isReportPage && <ExportDropdown />}
+                <div className="relative" ref={dropdownRef}>
+                  <NotificationBell
+                    onClick={() =>
+                      setShowNotifications((prev) => !prev)
+                    }
+                  />
+
+                  <NotificationDropdown
+                    isOpen={showNotifications}
+                  />
+                </div>
+                {isReportPage && <ExportDropdown />}
                 <ThemeSwitcher />
               </>
             )}
