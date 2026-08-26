@@ -46,13 +46,17 @@ const ExpenseProvider = ({ children }) => {
     return storedTransactions ? JSON.parse(storedTransactions) : [];
   });
 
+  const [demoTransactions, setDemoTransactions] = useState([]);
+
   const transactions = useMemo(() => {
-    if (!currentUser) return [];
+    if (!currentUser) {
+      return demoTransactions;
+    }
 
     return allTransactions.filter(
       (transaction) => transaction.userId === currentUser.id
     );
-  }, [allTransactions, currentUser]);
+  }, [allTransactions, currentUser, demoTransactions]);
 
   const { addNotification, notifications } = useContext(NotificationContext);
 
@@ -341,24 +345,23 @@ const ExpenseProvider = ({ children }) => {
     return incomeMonths.size > 0 ? totalIncome / incomeMonths.size : 0;
   }, [filteredTransactions, totalIncome])
 
-  const loadDemoData = () => {
+  const loadDemoData = useCallback(() => {
+    // Demo data is only available for logged-out users
+    if (currentUser) return;
+
     const demoTransactions = transactionsData.map((transaction) => ({
       ...transaction,
-      id: Date.now() + Math.random(),
-      userId: currentUser.id,
+      id: `${Date.now()}-${Math.random()}`,
     }));
 
-    addNotification({
-      title: "Demo Data Loaded",
-      message: "Sample transactions have been added.",
-      type: "report",
-    });
+    setDemoTransactions(demoTransactions);
+  }, [currentUser]);
 
-    setAllTransactions((prev) => [
-      ...demoTransactions,
-      ...prev,
-    ]);
-  };
+  useEffect(() => {
+    if (currentUser) {
+      setDemoTransactions([]);
+    }
+  }, [currentUser]);
 
   const clearAllTransactions = () => {
     setAllTransactions((prev) =>

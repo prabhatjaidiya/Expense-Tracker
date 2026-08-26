@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/License-MIT-green" />
 </p>
 
-A modern, responsive and feature-rich **Expense Tracker** built with **React**, **Vite**, **Tailwind CSS**, and **Recharts** to help users manage their personal finances efficiently.
+A modern, responsive, and feature-rich **Expense Tracker** built with **React**, **Vite**, **Tailwind CSS**, and **Recharts** to help users manage their personal finances efficiently.
 
 ## 🌐 Live Demo
 
@@ -18,114 +18,148 @@ A modern, responsive and feature-rich **Expense Tracker** built with **React**, 
 
 # ✨ Features
 
-## 📊 Dashboard
+## 🌐 Public Dashboard
 
-- Financial overview
-- Total Balance
-- Total Income
-- Total Expenses
-- Total Transactions
-- Recent Transactions
-- Budget Summary
-- Quick Statistics
+The dashboard is accessible without authentication, allowing visitors to explore the application before creating an account.
+
+Visitors can:
+
+* View the dashboard layout
+* Explore sample financial data
+* Load demo transactions
+* View charts and analytics
+* Explore budget information
+* Experience the application without registration
+
+Authenticated users can access their own personalized financial data.
 
 ---
 
 ## 💳 Transaction Management
 
-- Add Transactions
-- Edit Transactions
-- Delete Transactions
-- Search Transactions
-- Filter by Category
-- Filter by Type
-- Sort by Date
-- Sort by Amount
+* Add Transactions
+* Edit Transactions
+* Delete Transactions
+* Search Transactions
+* Filter by Category
+* Filter by Type
+* Sort by Date
+* Sort by Amount
 
 ---
 
 ## 📈 Analytics
 
-Interactive charts built using **Recharts**
+Interactive charts built using **Recharts**.
 
-- Monthly Income vs Expense
-- Expense Trend
-- Savings Trend
-- Expense Categories
-- Top Spending Categories
-- Financial Insights
+* Monthly Income vs Expense
+* Expense Trend
+* Savings Trend
+* Expense Categories
+* Top Spending Categories
+* Financial Insights
 
 ---
 
 ## 💸 Budget Management
 
-- Monthly Budget
-- Category Budgets
-- Budget Progress
-- Budget Alerts
-- Remaining Budget
-- Overspending Detection
+* Monthly Budget
+* Category Budgets
+* Budget Progress
+* Budget Alerts
+* Remaining Budget
+* Overspending Detection
 
 ---
 
 ## 🔔 Notification Center
 
-Automatic notifications for
+Automatic notifications for:
 
-- Budget exceeded
-- Budget warning
-- Large expenses
-- High income
-- Monthly milestones
-- Financial achievements
+* Budget exceeded
+* Budget warning
+* Large expenses
+* High income
+* Monthly milestones
+* Financial achievements
 
 ---
 
 ## 👤 Authentication
 
-- Register
-- Login
-- Forgot Password
-- Protected Routes
-- User Session
+* Register
+* Login
+* Forgot Password
+* User Session
+* Protected Application Routes
+* Public Dashboard
+* Demo Mode
+
+### Route Access
+
+| Route              | Access       |
+| ------------------ | ------------ |
+| `/` Dashboard      | 🌐 Public    |
+| `/login`           | 🌐 Public    |
+| `/register`        | 🌐 Public    |
+| `/forgot-password` | 🌐 Public    |
+| `/transactions`    | 🔒 Protected |
+| `/add-expense`     | 🔒 Protected |
+| `/analytics`       | 🔒 Protected |
+| `/budget`          | 🔒 Protected |
+| `/reports`         | 🔒 Protected |
+| `/profile`         | 🔒 Protected |
+
+### Demo Mode
+
+Visitors can explore the dashboard without creating an account.
+
+* Load sample financial transactions
+* View charts and analytics
+* Explore budget information
+* View dashboard statistics
+* Demo data is temporary
+* Demo data is separate from authenticated user data
+* Demo data is not added to a user's account
+* Demo data is cleared when a user logs in
 
 ---
 
 ## 👤 User Profile
 
-- Edit Profile
-- Upload Avatar
-- Change Password
-- Account Statistics
-- Logout
-- Delete Account
-- Delete All Data
+* Edit Profile
+* Upload Avatar
+* Change Password
+* Account Statistics
+* Logout
+* Delete Account
+* Delete All Data
 
 ---
 
 ## 🌙 Dark Mode
 
-- Light Theme
-- Dark Theme
-- Fully Responsive
+* Light Theme
+* Dark Theme
+* Fully Responsive
 
 ---
 
 ## 📤 Export
 
-- Export CSV
-- Export PDF Report
-- Export Dashboard PDF
+* Export CSV
+* Export PDF Report
+* Export Dashboard PDF
 
 ---
 
 # 📱 Responsive Design
 
-✔ Desktop
+The application is designed to work across:
 
-✔ Tablet
-
-✔ Mobile
+* Desktop
+* Tablet
+* Mobile
 
 ---
 
@@ -133,30 +167,30 @@ Automatic notifications for
 
 ### Frontend
 
-- React
-- Vite
-- Tailwind CSS
-- React Router DOM
-- Context API
+* React
+* Vite
+* Tailwind CSS
+* React Router DOM
+* Context API
 
 ### Charts
 
-- Recharts
+* Recharts
 
 ### Icons
 
-- Lucide React
-- React Icons
+* Lucide React
+* React Icons
 
 ### Libraries
 
-- React Datepicker
-- React Toastify
-- PapaParse
-- File Saver
-- jsPDF
-- jsPDF AutoTable
-- html2canvas
+* React Datepicker
+* React Toastify
+* PapaParse
+* File Saver
+* jsPDF
+* jsPDF AutoTable
+* html2canvas
 
 ---
 
@@ -179,37 +213,37 @@ src
 
 # 🚀 Getting Started
 
-Clone the repository
+## Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/expense-tracker.git
 ```
 
-Move into project
+## Move into the project
 
 ```bash
 cd expense-tracker
 ```
 
-Install packages
+## Install dependencies
 
 ```bash
 npm install
 ```
 
-Run locally
+## Run locally
 
 ```bash
 npm run dev
 ```
 
-Production build
+## Production build
 
 ```bash
 npm run build
 ```
 
-Preview build
+## Preview production build
 
 ```bash
 npm run preview
@@ -219,24 +253,39 @@ npm run preview
 
 # 💾 Data Storage
 
-Currently the project stores data using **Local Storage**
+The application currently uses **Local Storage** for client-side data persistence.
 
-- User Accounts
-- Transactions
-- Budget
-- Notifications
-- Theme
-- Profile
+### Stored Data
 
-No backend required.
+* User Accounts
+* User Transactions
+* Monthly Budgets
+* Category Budgets
+* Notifications
+* Theme
+* User Profile
+
+### Demo Data
+
+Demo data is handled separately from authenticated user data.
+
+When a visitor selects **Load Demo Data**:
+
+* Sample transactions are loaded into the dashboard
+* No login or registration is required
+* Demo transactions are not saved to the user's account
+* Demo data is cleared when the user logs in
+* Real user transactions remain isolated by `userId`
+
+No backend is currently required.
 
 ---
 
 # 📷 Screenshots
 
-Create a folder named **screenshots** inside your project.
+Create a folder named **screenshots** inside the project.
 
-```
+```text
 expense-tracker
 │
 ├── screenshots
@@ -248,8 +297,6 @@ expense-tracker
 │   ├── notifications.png
 │   └── darkmode.png
 ```
-
-Then add the following:
 
 ## Dashboard
 
@@ -295,32 +342,36 @@ Then add the following:
 
 # 🎯 Future Improvements
 
-- Recurring Transactions
-- Savings Goals
-- Investment Tracking
-- Multi Currency Support
-- Cloud Database
-- AI Spending Insights
-- Receipt Scanner
-- Email Reports
-- Progressive Web App (PWA)
+* Recurring Transactions
+* Savings Goals
+* Investment Tracking
+* Multi Currency Support
+* Cloud Database
+* AI Spending Insights
+* Receipt Scanner
+* Email Reports
+* Progressive Web App (PWA)
 
 ---
 
 # 📚 What I Learned
 
-- React Fundamentals
-- Context API
-- State Management
-- CRUD Operations
-- Routing
-- Local Storage
-- Responsive Design
-- Data Visualization
-- Budget Calculations
-- PDF & CSV Export
-- Authentication
-- Dark Mode Implementation
+Building this project helped me practice:
+
+* React Fundamentals
+* Context API
+* State Management
+* CRUD Operations
+* Routing
+* Protected Routes
+* Public Routes
+* Local Storage
+* Responsive Design
+* Data Visualization
+* Budget Calculations
+* PDF & CSV Export
+* Authentication
+* Dark Mode Implementation
 
 ---
 

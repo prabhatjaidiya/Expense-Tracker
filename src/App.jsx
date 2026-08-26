@@ -56,9 +56,7 @@ const App = () => {
             <Route
               path="/"
               element={
-                <ProtectedRoute>
                   <Dashboard />
-                </ProtectedRoute>
               }
             />
 
